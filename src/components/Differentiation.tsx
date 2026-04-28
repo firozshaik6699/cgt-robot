@@ -31,14 +31,14 @@ const Differentiation = () => {
                             <p className="text-xs font-medium tracking-[0.2em] uppercase text-[#F4751E]/60 mb-4">Who We're For</p>
                             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[-0.03em] text-white mb-6 leading-[1.1]">
                                 We're not for <br />
-                                <span className="text-white/30">everyone — and</span><br />
-                                <span className="text-white/30">that's the point.</span>
+                                <span className="text-white/45">everyone — and</span><br />
+                                <span className="text-white/45">that's the point.</span>
                             </h2>
-                            <p className="text-base text-white/35 leading-relaxed max-w-md font-light mb-8">
+                            <p className="text-base text-white/55 leading-relaxed max-w-md font-light mb-8">
                                 If you're after a cheap vendor who follows orders and delivers cookie-cutter solutions, we're not the right fit. We partner with teams who are ready to invest in building something exceptional.
                             </p>
                             <a 
-                                href="#cta" 
+                                href="#contact" 
                                 className="inline-flex items-center gap-2 text-sm font-semibold text-[#F4751E]/70 hover:text-[#F4751E] transition-colors duration-300 group"
                             >
                                 Let's talk about your project
@@ -55,7 +55,7 @@ const Differentiation = () => {
                                     <h3 className="text-base font-semibold text-white mb-1.5 tracking-tight group-hover:text-[#F4751E]/80 transition-colors duration-300">
                                         {item.title}
                                     </h3>
-                                    <p className="text-sm text-white/30 font-light leading-relaxed">{item.description}</p>
+                                    <p className="text-sm text-white/55 font-light leading-relaxed">{item.description}</p>
                                 </div>
                             </Reveal>
                         ))}

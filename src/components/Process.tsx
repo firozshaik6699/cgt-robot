@@ -33,7 +33,7 @@ const Process = () => {
                         <p className="text-xs font-medium tracking-[0.2em] uppercase text-[#F4751E]/60 mb-4">Our Process</p>
                         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[-0.03em] text-white mb-5 leading-[1.1]">
                             A clear path<br />
-                            <span className="text-white/30">from idea to launch.</span>
+                            <span className="text-white/45">from idea to launch.</span>
                         </h2>
                     </div>
                 </Reveal>
@@ -56,7 +56,7 @@ const Process = () => {
                                         <span className="text-xs font-bold text-[#F4751E]/70">{step.number}</span>
                                     </div>
                                     <h3 className="text-lg font-semibold text-white mb-3 tracking-tight">{step.title}</h3>
-                                    <p className="text-sm text-white/30 leading-relaxed font-light">{step.description}</p>
+                                    <p className="text-sm text-white/55 leading-relaxed font-light">{step.description}</p>
                                 </div>
                             </div>
                         </Reveal>

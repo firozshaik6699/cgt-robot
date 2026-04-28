@@ -22,13 +22,13 @@ const Navbar = () => {
 
                     {/* Nav Links (Desktop) */}
                     <div className="hidden md:flex items-center gap-8">
-                        <a href="#services" className="text-[13px] text-white/35 hover:text-white/70 transition-colors duration-300 font-medium">Services</a>
-                        <a href="#work" className="text-[13px] text-white/35 hover:text-white/70 transition-colors duration-300 font-medium">Work</a>
-                        <a href="#process" className="text-[13px] text-white/35 hover:text-white/70 transition-colors duration-300 font-medium">Process</a>
+                        <a href="#services" className="text-[13px] text-white/60 hover:text-white/90 transition-colors duration-300 font-medium">Services</a>
+                        <a href="#work" className="text-[13px] text-white/60 hover:text-white/90 transition-colors duration-300 font-medium">Work</a>
+                        <a href="#process" className="text-[13px] text-white/60 hover:text-white/90 transition-colors duration-300 font-medium">Process</a>
                     </div>
 
                     {/* CTA Button */}
-                    <MagneticButton>Book a Call</MagneticButton>
+                    <MagneticButton onClick={() => window.location.hash = 'contact'}>Book a Call</MagneticButton>
                 </div>
             </div>
         </nav>

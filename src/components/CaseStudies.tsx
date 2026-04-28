@@ -41,7 +41,7 @@ const CaseStudies = () => {
                         <p className="text-xs font-medium tracking-[0.2em] uppercase text-[#F4751E]/60 mb-4">Case Studies</p>
                         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[-0.03em] text-white mb-5 leading-[1.1]">
                             Results that speak<br />
-                            <span className="text-white/30">louder than promises.</span>
+                            <span className="text-white/45">louder than promises.</span>
                         </h2>
                     </div>
                 </Reveal>
@@ -64,15 +64,15 @@ const CaseStudies = () => {
                                         
                                         <div className="space-y-4">
                                             <div>
-                                                <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-white/20 mb-1.5">Problem</p>
-                                                <p className="text-sm text-white/40 leading-relaxed font-light">{study.problem}</p>
+                                                <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-white/45 mb-1.5">Problem</p>
+                                                <p className="text-sm text-white/60 leading-relaxed font-light">{study.problem}</p>
                                             </div>
                                             <div>
-                                                <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-white/20 mb-1.5">Solution</p>
-                                                <p className="text-sm text-white/40 leading-relaxed font-light">{study.solution}</p>
+                                                <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-white/45 mb-1.5">Solution</p>
+                                                <p className="text-sm text-white/60 leading-relaxed font-light">{study.solution}</p>
                                             </div>
                                             <div>
-                                                <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-white/20 mb-1.5">Result</p>
+                                                <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-white/45 mb-1.5">Result</p>
                                                 <p className="text-sm text-[#F4751E]/70 leading-relaxed font-medium">{study.result}</p>
                                             </div>
                                         </div>
@@ -81,7 +81,7 @@ const CaseStudies = () => {
                                     {/* Right: Metric Highlight */}
                                     <div className="lg:w-48 flex-shrink-0 flex lg:flex-col items-center lg:items-center justify-start lg:justify-center lg:text-center gap-3 lg:gap-1 lg:pt-8">
                                         <span className="text-5xl md:text-6xl lg:text-7xl font-extrabold gradient-text leading-none">{study.metric}</span>
-                                        <span className="text-xs font-medium text-white/25 tracking-wide uppercase">{study.metricLabel}</span>
+                                        <span className="text-xs font-medium text-white/50 tracking-wide uppercase">{study.metricLabel}</span>
                                     </div>
                                 </div>
                             </div>

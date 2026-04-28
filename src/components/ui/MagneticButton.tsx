@@ -5,9 +5,10 @@ import { ArrowUpRight } from 'lucide-react';
 interface MagneticButtonProps {
     children: React.ReactNode;
     className?: string;
+    onClick?: () => void;
 }
 
-const MagneticButton: React.FC<MagneticButtonProps> = ({ children, className }) => {
+const MagneticButton: React.FC<MagneticButtonProps> = ({ children, className, onClick }) => {
     const ref = useRef<HTMLButtonElement>(null);
 
     const x = useMotionValue(0);
@@ -34,6 +35,7 @@ const MagneticButton: React.FC<MagneticButtonProps> = ({ children, className }) 
     return (
         <motion.button
             ref={ref}
+            onClick={onClick}
             onMouseMove={handleMouse}
             onMouseLeave={reset}
             style={{ x: springX, y: springY }}

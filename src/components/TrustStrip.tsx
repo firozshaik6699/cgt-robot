@@ -10,7 +10,7 @@ const TrustStrip = () => {
         <section className="section-padding relative overflow-hidden">
             <div className="container-main">
                 <Reveal>
-                    <p className="text-center text-xs font-medium tracking-[0.2em] uppercase text-white/20 mb-12">
+                    <p className="text-center text-xs font-medium tracking-[0.2em] uppercase text-white/50 mb-12">
                         Trusted by growing businesses across industries
                     </p>
                 </Reveal>
@@ -20,22 +20,22 @@ const TrustStrip = () => {
                     className="relative flex overflow-hidden w-full"
                     style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}
                 >
-                    <div className="flex w-[200%] animate-marquee whitespace-nowrap" style={{ willChange: 'transform' }}>
-                        <div className="flex justify-around w-1/2 items-center">
+                    <div className="flex w-max animate-marquee" style={{ willChange: 'transform' }}>
+                        <div className="flex flex-shrink-0 items-center justify-around px-8">
                             {TRUST_BRANDS.map((brand, i) => (
                                 <span
                                     key={`b1-${i}`}
-                                    className="mx-8 md:mx-12 text-sm md:text-base font-semibold tracking-widest text-white/[0.08] uppercase select-none"
+                                    className="mx-8 md:mx-12 text-sm md:text-base font-semibold tracking-widest text-white/40 uppercase select-none"
                                 >
                                     {brand}
                                 </span>
                             ))}
                         </div>
-                        <div className="flex justify-around w-1/2 items-center">
+                        <div className="flex flex-shrink-0 items-center justify-around px-8">
                             {TRUST_BRANDS.map((brand, i) => (
                                 <span
                                     key={`b2-${i}`}
-                                    className="mx-8 md:mx-12 text-sm md:text-base font-semibold tracking-widest text-white/[0.08] uppercase select-none"
+                                    className="mx-8 md:mx-12 text-sm md:text-base font-semibold tracking-widest text-white/40 uppercase select-none"
                                 >
                                     {brand}
                                 </span>

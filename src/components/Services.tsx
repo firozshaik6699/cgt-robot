@@ -34,9 +34,9 @@ const Services = () => {
                         <p className="text-xs font-medium tracking-[0.2em] uppercase text-[#F4751E]/60 mb-4">What We Do</p>
                         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[-0.03em] text-white mb-5 leading-[1.1]">
                             Engineering solutions<br />
-                            <span className="text-white/30">that move the needle.</span>
+                            <span className="text-white/45">that move the needle.</span>
                         </h2>
-                        <p className="text-base text-white/35 leading-relaxed max-w-lg font-light">
+                        <p className="text-base text-white/55 leading-relaxed max-w-lg font-light">
                             We don't do cookie-cutter. Every system we build is purpose-engineered for your business outcomes.
                         </p>
                     </div>
@@ -54,7 +54,7 @@ const Services = () => {
                                     <ArrowUpRight className="w-5 h-5 text-white/10 group-hover:text-[#F4751E]/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
                                 </div>
                                 <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">{service.title}</h3>
-                                <p className="text-sm text-white/35 leading-relaxed font-light">{service.description}</p>
+                                <p className="text-sm text-white/55 leading-relaxed font-light">{service.description}</p>
                             </div>
                         </Reveal>
                     ))}
