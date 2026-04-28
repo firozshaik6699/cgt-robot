@@ -16,17 +16,17 @@ const TechStrip = () => {
                 className="relative flex overflow-hidden w-full max-w-5xl mx-auto"
                 style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)' }}
             >
-                <div className="flex w-[200%] animate-marquee whitespace-nowrap" style={{ willChange: 'transform' }}>
-                    <div className="flex justify-around w-1/2 items-center">
+                <div className="flex w-max animate-marquee whitespace-nowrap" style={{ willChange: 'transform' }}>
+                    <div className="flex items-center">
                         {CORE_TECHNOLOGIES.map((tech, i) => (
-                            <span key={`t1-${i}`} className="mx-6 md:mx-10 text-lg md:text-xl font-bold tracking-[0.1em] text-white/[0.15] uppercase select-none">
+                            <span key={`t1-${i}`} className="mx-8 md:mx-12 text-lg md:text-xl font-bold tracking-[0.1em] text-white/[0.15] uppercase select-none flex-shrink-0">
                                 {tech}
                             </span>
                         ))}
                     </div>
-                    <div className="flex justify-around w-1/2 items-center">
+                    <div className="flex items-center">
                         {CORE_TECHNOLOGIES.map((tech, i) => (
-                            <span key={`t2-${i}`} className="mx-6 md:mx-10 text-lg md:text-xl font-bold tracking-[0.1em] text-white/[0.15] uppercase select-none">
+                            <span key={`t2-${i}`} className="mx-8 md:mx-12 text-lg md:text-xl font-bold tracking-[0.1em] text-white/[0.15] uppercase select-none flex-shrink-0">
                                 {tech}
                             </span>
                         ))}
