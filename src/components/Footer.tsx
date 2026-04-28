@@ -1,4 +1,5 @@
 import { MapPin, Phone, Mail } from 'lucide-react';
+import logo from '@/assets/logo_metallic.jpg';
 
 const Footer = () => {
     return (
@@ -12,7 +13,7 @@ const Footer = () => {
                     <div className="md:col-span-5 flex flex-col">
                         <div className="mb-6 cursor-pointer group" onClick={() => window.location.href = '/'}>
                             <img 
-                                src="/src/assets/logo_metallic.jpg" 
+                                src={logo} 
                                 alt="CGT Logo" 
                                 className="h-16 w-auto object-contain group-hover:opacity-80 transition-opacity duration-300"
                                 style={{ mixBlendMode: 'screen' }}

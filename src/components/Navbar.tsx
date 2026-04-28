@@ -1,4 +1,5 @@
 import MagneticButton from '@/components/ui/MagneticButton';
+import logo from '@/assets/logo_metallic.jpg';
 
 const Navbar = () => {
     return (
@@ -13,7 +14,7 @@ const Navbar = () => {
                     {/* Logo */}
                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.location.href = '/'}>
                         <img 
-                            src="/src/assets/logo_metallic.jpg" 
+                            src={logo} 
                             alt="CGT Logo" 
                             className="h-7 md:h-8 w-auto object-contain hover:opacity-80 transition-opacity duration-300"
                             style={{ mixBlendMode: 'screen' }}
