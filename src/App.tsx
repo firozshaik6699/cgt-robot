@@ -18,7 +18,7 @@ function App() {
       <div
         className="fixed inset-0 w-full h-full pointer-events-none"
         style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 1.2px, transparent 1.2px)',
+          backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.4) 1.2px, transparent 1.2px)',
           backgroundSize: '28px 28px',
           backgroundPosition: '0 0'
         }}
