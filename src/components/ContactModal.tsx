@@ -41,6 +41,7 @@ const ContactModal = () => {
 
         const formData = new FormData(e.currentTarget);
         const name = formData.get("name");
+        const email = formData.get("email");
         const service = formData.get("service");
         const budget = formData.get("budget");
         const message = formData.get("message");
@@ -51,7 +52,7 @@ const ContactModal = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ name, service, budget, message })
+                body: JSON.stringify({ name, email, service, budget, message })
             });
 
             if (response.ok) {
@@ -125,6 +126,19 @@ const ContactModal = () => {
                                 id="name" 
                                 required
                                 placeholder="Your name" 
+                                className="w-full bg-[#141414] border border-white/[0.05] rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#F4751E]/50 focus:ring-1 focus:ring-[#F4751E]/50 transition-all"
+                            />
+                        </div>
+
+                        {/* Email */}
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="email" className="text-[13px] font-medium text-white/80 ml-1">Email</label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                id="email" 
+                                required
+                                placeholder="your@email.com" 
                                 className="w-full bg-[#141414] border border-white/[0.05] rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#F4751E]/50 focus:ring-1 focus:ring-[#F4751E]/50 transition-all"
                             />
                         </div>

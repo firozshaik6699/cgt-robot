@@ -153,8 +153,7 @@ html {
 
 /* Performance: section rendering optimization */
 section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 800px;
+  /* content-visibility often causes severe scroll lag and layout shifts. Removed for smoother UX. */
 }
 
 /* Spotlight reveal animation */
