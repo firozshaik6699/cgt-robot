@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState, useEffect } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { ArrowUpRight, Play } from 'lucide-react';
 import Spotlight from "@/components/ui/Spotlight";
@@ -6,7 +6,19 @@ import Spotlight from "@/components/ui/Spotlight";
 // Lazy load heavy 3D Spline scene
 const SplineScene = lazy(() => import("@/components/ui/SplineScene"));
 
+// Defer Spline mount until after page is interactive
+const useDeferredMount = (delayMs = 2000) => {
+    const [shouldMount, setShouldMount] = useState(false);
+    useEffect(() => {
+        const id = setTimeout(() => setShouldMount(true), delayMs);
+        return () => clearTimeout(id);
+    }, [delayMs]);
+    return shouldMount;
+};
+
 const Hero = () => {
+    const shouldMountSpline = useDeferredMount(2000);
+
     const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
@@ -123,25 +135,24 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* Spline 3D Interactive Model */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 2, delay: 0.5 }}
-                className="absolute inset-0 z-0 pointer-events-none"
-            >
-                {/* Mobile fade mask */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90 lg:hidden z-10 pointer-events-none" />
-                
-                <div className="absolute top-[10%] md:top-0 bottom-0 right-0 w-full lg:w-[60%] pointer-events-none opacity-70 md:opacity-100">
-                    <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-white/10 animate-pulse tracking-widest text-xs">LOADING</div>}>
-                        <SplineScene
-                            scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                            className="w-full h-full"
-                        />
-                    </Suspense>
+            {/* Spline 3D Interactive Model — deferred mount + auto-pause when off-screen */}
+            {shouldMountSpline && (
+                <div
+                    className="absolute inset-0 z-0 pointer-events-none animate-fade-in"
+                >
+                    {/* Mobile fade mask */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90 lg:hidden z-10 pointer-events-none" />
+                    
+                    <div className="absolute top-[10%] md:top-0 bottom-0 right-0 w-full lg:w-[60%] pointer-events-none opacity-70 md:opacity-100">
+                        <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-white/10 animate-pulse tracking-widest text-xs">LOADING</div>}>
+                            <SplineScene
+                                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                                className="w-full h-full"
+                            />
+                        </Suspense>
+                    </div>
                 </div>
-            </motion.div>
+            )}
         </section>
     );
 };
