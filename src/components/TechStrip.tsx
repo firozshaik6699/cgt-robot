@@ -16,7 +16,7 @@ const TechStrip = () => {
                 className="relative flex overflow-hidden w-full max-w-5xl mx-auto"
                 style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)' }}
             >
-                <div className="flex w-max animate-marquee whitespace-nowrap" style={{ willChange: 'transform' }}>
+                <div className="flex w-max animate-marquee whitespace-nowrap">
                     <div className="flex items-center">
                         {CORE_TECHNOLOGIES.map((tech, i) => (
                             <span key={`t1-${i}`} className="mx-8 md:mx-12 text-lg md:text-xl font-bold tracking-[0.1em] text-white/[0.15] uppercase select-none flex-shrink-0">

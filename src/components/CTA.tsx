@@ -29,7 +29,7 @@ const CTA: React.FC = () => {
             </div>
 
             {/* Ambient glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#F4751E]/[0.02] blur-[120px] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#F4751E]/[0.03] blur-[60px] pointer-events-none" style={{ contain: 'strict' }} />
         </section>
     );
 };

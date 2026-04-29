@@ -129,12 +129,11 @@ const Hero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 2, delay: 0.5 }}
                 className="absolute inset-0 z-0 pointer-events-none"
-                style={{ willChange: 'opacity' }}
             >
                 {/* Mobile fade mask */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black via-black/30 to-black lg:hidden z-10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90 lg:hidden z-10 pointer-events-none" />
                 
-                <div className="absolute top-[10%] md:top-0 bottom-0 right-0 w-full lg:w-[60%] pointer-events-none opacity-30 md:opacity-100">
+                <div className="absolute top-[10%] md:top-0 bottom-0 right-0 w-full lg:w-[60%] pointer-events-none opacity-70 md:opacity-100">
                     <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-white/10 animate-pulse tracking-widest text-xs">LOADING</div>}>
                         <SplineScene
                             scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"

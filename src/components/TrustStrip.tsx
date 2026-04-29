@@ -20,7 +20,7 @@ const TrustStrip = () => {
                     className="relative flex overflow-hidden w-full"
                     style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}
                 >
-                    <div className="flex w-max animate-marquee" style={{ willChange: 'transform' }}>
+                    <div className="flex w-max animate-marquee">
                         <div className="flex flex-shrink-0 items-center justify-around px-8">
                             {TRUST_BRANDS.map((brand, i) => (
                                 <span

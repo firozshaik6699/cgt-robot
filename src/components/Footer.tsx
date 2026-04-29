@@ -16,7 +16,6 @@ const Footer = () => {
                                 src={logo} 
                                 alt="CGT Logo" 
                                 className="h-16 w-auto object-contain group-hover:opacity-80 transition-opacity duration-300"
-                                style={{ mixBlendMode: 'screen' }}
                             />
                         </div>
                         <p className="text-white/50 text-sm leading-relaxed max-w-xs font-light mb-8">

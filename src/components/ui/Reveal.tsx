@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface RevealProps {
   children: React.ReactNode;
@@ -12,48 +11,53 @@ interface RevealProps {
   amount?: number;
 }
 
-const directionMap = {
-  up: { x: 0, y: 1 },
-  down: { x: 0, y: -1 },
-  left: { x: 1, y: 0 },
-  right: { x: -1, y: 0 },
-};
-
 const Reveal: React.FC<RevealProps> = ({
   children,
   className,
   delay = 0,
-  duration = 0.8,
   direction = 'up',
-  distance = 40,
   once = true,
-  amount = 0.15,
 }) => {
-  const dir = directionMap[direction];
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (once) observer.unobserve(el);
+        }
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [once]);
+
+  const directionStyles: Record<string, string> = {
+    up: 'translate3d(0, 30px, 0)',
+    down: 'translate3d(0, -30px, 0)',
+    left: 'translate3d(30px, 0, 0)',
+    right: 'translate3d(-30px, 0, 0)',
+  };
 
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        x: dir.x * distance,
-        y: dir.y * distance,
-      }}
-      whileInView={{
-        opacity: 1,
-        x: 0,
-        y: 0,
-      }}
-      viewport={{ once, amount }}
-      transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.4, 0, 1],
-      }}
+    <div
+      ref={ref}
       className={className}
-      style={{ willChange: 'transform, opacity' }}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translate3d(0, 0, 0)' : directionStyles[direction],
+        transition: `opacity 0.6s cubic-bezier(0.25, 0.4, 0, 1) ${delay}s, transform 0.6s cubic-bezier(0.25, 0.4, 0, 1) ${delay}s`,
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 };
 

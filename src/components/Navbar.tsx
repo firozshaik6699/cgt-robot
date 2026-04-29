@@ -17,7 +17,6 @@ const Navbar = () => {
                             src={logo} 
                             alt="CGT Logo" 
                             className="h-7 md:h-8 w-auto object-contain hover:opacity-80 transition-opacity duration-300"
-                            style={{ mixBlendMode: 'screen' }}
                         />
                     </div>
 
