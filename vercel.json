@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/partnership/syncrobiz",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/partnership/syncrobiz/",
+      "destination": "/index.html"
+    }
+  ]
+}
