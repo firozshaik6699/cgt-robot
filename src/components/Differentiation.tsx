@@ -40,7 +40,7 @@ const Differentiation = () => {
                                 <span className="text-white/45">that's the point.</span>
                             </h2>
                             <p className="text-base text-white/55 leading-relaxed max-w-md font-light mb-8">
-                                If you're after a cheap vendor who follows orders and delivers cookie-cutter solutions, we're not the right fit. We partner with teams who are ready to invest in building something exceptional.
+                                We focus on creating bespoke, high-quality software rather than standard, off-the-shelf solutions. We love partnering with teams who are ready to invest in building something truly exceptional.
                             </p>
                             <a 
                                 href="#contact" 

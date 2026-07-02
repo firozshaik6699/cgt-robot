@@ -141,56 +141,16 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
         <div className="absolute right-[8%] bottom-[10%] w-[520px] h-[260px] rounded-full blur-[70px] mix-blend-multiply bg-[rgba(0,0,0,0.28)]" />
 
         {/* Lower Curved Motion Lines / Arcs */}
-        <svg
+        <div
           className="absolute left-0 bottom-0 w-full pointer-events-none"
-          style={{ height: '55%', animation: 'move-arcs 10s ease-in-out infinite alternate' }}
-          viewBox="0 0 1920 600"
-          preserveAspectRatio="none"
-          fill="none"
-        >
-          {/* Wide dark translucent orange band — deepest layer */}
-          <path
-            d="M-200 580 Q 400 320, 960 340 Q 1500 360, 2100 220"
-            stroke="rgba(255, 70, 0, 0.12)"
-            strokeWidth="110"
-            strokeLinecap="round"
-          />
-          {/* Thick deep brown-orange arc — main racing stripe */}
-          <path
-            d="M-200 570 Q 420 290, 980 310 Q 1520 330, 2100 180"
-            stroke="rgba(180, 60, 0, 0.65)"
-            strokeWidth="28"
-            strokeLinecap="round"
-          />
-          {/* Bright vivid orange line — hero accent line */}
-          <path
-            d="M-200 555 Q 440 275, 1000 295 Q 1540 315, 2100 160"
-            stroke="rgba(255, 120, 20, 1)"
-            strokeWidth="5"
-            strokeLinecap="round"
-          />
-          {/* Thin warm orange edge highlight on top of thick stripe */}
-          <path
-            d="M-200 545 Q 450 265, 1010 285 Q 1550 305, 2100 148"
-            stroke="rgba(255, 150, 50, 0.6)"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-          {/* Thin white arc — runs below and separate */}
-          <path
-            d="M-200 598 Q 380 390, 940 395 Q 1480 400, 2100 310"
-            stroke="rgba(255, 255, 255, 0.75)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-          {/* Faint ghostly grey arc — lowest, barely visible */}
-          <path
-            d="M-200 600 Q 350 420, 900 430 Q 1440 440, 2100 360"
-            stroke="rgba(255, 255, 255, 0.12)"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
+          style={{ 
+            height: '55%', 
+            animation: 'move-arcs 10s ease-in-out infinite alternate',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 600' preserveAspectRatio='none' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-200 580 Q 400 320, 960 340 Q 1500 360, 2100 220' stroke='rgba(255, 70, 0, 0.12)' stroke-width='110' stroke-linecap='round'/%3E%3Cpath d='M-200 570 Q 420 290, 980 310 Q 1520 330, 2100 180' stroke='rgba(180, 60, 0, 0.65)' stroke-width='28' stroke-linecap='round'/%3E%3Cpath d='M-200 555 Q 440 275, 1000 295 Q 1540 315, 2100 160' stroke='rgba(255, 120, 20, 1)' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M-200 545 Q 450 265, 1010 285 Q 1550 305, 2100 148' stroke='rgba(255, 150, 50, 0.6)' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M-200 598 Q 380 390, 940 395 Q 1480 400, 2100 310' stroke='rgba(255, 255, 255, 0.75)' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M-200 600 Q 350 420, 900 430 Q 1440 440, 2100 360' stroke='rgba(255, 255, 255, 0.12)' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")`,
+            backgroundSize: '100% 100%',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
 
         {/* Vignette */}
         <div

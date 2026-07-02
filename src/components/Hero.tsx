@@ -141,10 +141,7 @@ const Hero = () => {
                 <div
                     className="absolute inset-0 z-0 pointer-events-none animate-fade-in"
                 >
-                    {/* Mobile fade mask */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90 lg:hidden z-10 pointer-events-none" />
-                    
-                    <div className="absolute top-[10%] md:top-0 bottom-0 right-0 w-full lg:w-[60%] pointer-events-none opacity-70 md:opacity-100">
+                    <div className="absolute top-[10%] md:top-0 bottom-0 right-0 w-full lg:w-[60%] pointer-events-none">
                         <Suspense fallback={
                             <div className="w-full h-full flex items-center justify-center">
                                 <div className="w-8 h-8 border-2 border-white/5 border-t-[#F4751E] rounded-full animate-spin" />
