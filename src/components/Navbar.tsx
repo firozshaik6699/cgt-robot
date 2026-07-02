@@ -1,9 +1,12 @@
 import MagneticButton from '@/components/ui/MagneticButton';
 import logo from '@/assets/logo_metallic_transparent.png';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-    const isHomePage = window.location.pathname === '/';
-    const isPartnershipPage = window.location.pathname.replace(/\/$/, '') === '/partnership/syncrobiz';
+    const location = useLocation();
+    const pathname = location.pathname.replace(/\/$/, '') || '/';
+    const isHomePage = pathname === '/';
+    const isPartnershipPage = pathname === '/partnership/syncrobiz';
     const homeHref = (hash: string) => isHomePage ? `#${hash}` : `/#${hash}`;
 
     return (
@@ -16,20 +19,20 @@ const Navbar = () => {
                     willChange: 'transform',
                 }}>
                     {/* Logo */}
-                    <div className="flex items-center gap-2 cursor-pointer group" onClick={() => window.location.href = '/'}>
+                    <Link to="/" className="flex items-center gap-2 cursor-pointer group">
                         <img 
                             src={logo} 
                             alt="CGT Logo" 
                             className="h-8 md:h-9 w-auto object-contain brightness-125 contrast-125 drop-shadow-[0_0_12px_rgba(255,255,255,0.24)] transition-all duration-300 group-hover:brightness-150 group-hover:drop-shadow-[0_0_16px_rgba(244,117,30,0.24)]"
                         />
-                    </div>
+                    </Link>
 
                     {/* Nav Links (Desktop) */}
                     <div className="hidden md:flex items-center gap-8">
                         <a href={homeHref('services')} className="text-[13px] text-white/60 hover:text-white/90 transition-colors duration-300 font-medium">Services</a>
                         <a href={homeHref('process')} className="text-[13px] text-white/60 hover:text-white/90 transition-colors duration-300 font-medium">Process</a>
                         <a href={homeHref('work')} className="text-[13px] text-white/60 hover:text-white/90 transition-colors duration-300 font-medium">Work</a>
-                        <a href="/partnership/syncrobiz" className={`text-[13px] transition-colors duration-300 font-medium ${isPartnershipPage ? 'text-[#F4751E]/90' : 'text-white/60 hover:text-white/90'}`}>Partnership</a>
+                        <Link to="/partnership/syncrobiz" className={`text-[13px] transition-colors duration-300 font-medium ${isPartnershipPage ? 'text-[#F4751E]/90' : 'text-white/60 hover:text-white/90'}`}>Partnership</Link>
                     </div>
 
                     {/* CTA Button */}

@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import TrustStrip from './components/TrustStrip'
@@ -13,7 +14,18 @@ import SyncrobizPartnership from './pages/SyncrobizPartnership'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
 import Blog from './pages/Blog'
+import { useEffect } from 'react'
 import './index.css'
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 const HomePage = () => (
   <>
@@ -28,26 +40,10 @@ const HomePage = () => (
   </>
 )
 
-function App() {
-  const normalizedPath = window.location.pathname.replace(/\/$/, '') || '/'
-
-  const renderPage = () => {
-    switch (normalizedPath) {
-      case '/partnership/syncrobiz':
-        return <SyncrobizPartnership />
-      case '/privacy':
-        return <PrivacyPolicy />
-      case '/terms':
-        return <TermsOfService />
-      case '/blog':
-        return <Blog />
-      default:
-        return <HomePage />
-    }
-  }
-
+const AppContent = () => {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-[#F4751E]/30 relative">
+      <ScrollToTop />
       {/* The Dot Grid Background with Edge Fading */}
       <div
         className="fixed inset-0 w-full h-full pointer-events-none"
@@ -65,11 +61,26 @@ function App() {
 
       <div className="relative z-10">
         <Navbar />
-        {renderPage()}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/partnership/syncrobiz" element={<SyncrobizPartnership />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="*" element={<HomePage />} />
+        </Routes>
         <ContactModal />
         <Footer />
       </div>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   )
 }
 

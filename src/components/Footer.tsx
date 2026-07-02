@@ -1,8 +1,11 @@
 import { MapPin, Phone, Mail } from 'lucide-react';
 import logo from '@/assets/logo_metallic_transparent.png';
+import { Link, useLocation } from 'react-router-dom';
 
 const Footer = () => {
-    const isHomePage = window.location.pathname === '/';
+    const location = useLocation();
+    const pathname = location.pathname.replace(/\/$/, '') || '/';
+    const isHomePage = pathname === '/';
     const homeHref = (hash: string) => isHomePage ? `#${hash}` : `/#${hash}`;
 
     return (
@@ -66,13 +69,13 @@ const Footer = () => {
                     
                     {/* Brand Info */}
                     <div className="md:col-span-5 flex flex-col">
-                        <div className="mb-7 cursor-pointer group inline-flex w-fit rounded-2xl border border-white/[0.04] bg-black/20 px-1 py-1 shadow-[0_18px_50px_rgba(0,0,0,0.28)]" onClick={() => window.location.href = '/'}>
+                        <Link to="/" className="mb-7 cursor-pointer group inline-flex w-fit rounded-2xl border border-white/[0.04] bg-black/20 px-1 py-1 shadow-[0_18px_50px_rgba(0,0,0,0.28)]">
                             <img 
                                 src={logo} 
                                 alt="CGT Logo" 
                                 className="h-20 md:h-24 w-auto object-contain brightness-125 contrast-125 drop-shadow-[0_0_18px_rgba(255,255,255,0.2)] transition-all duration-300 group-hover:brightness-150 group-hover:drop-shadow-[0_0_22px_rgba(244,117,30,0.22)]"
                             />
-                        </div>
+                        </Link>
                         <p className="text-white/50 text-sm leading-relaxed max-w-xs font-light mb-8">
                             Digital engineering studio building high-performance software systems, AI automation, and enterprise platforms.
                         </p>
@@ -120,7 +123,7 @@ const Footer = () => {
                             <a href={homeHref('services')} className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Services</a>
                             <a href={homeHref('work')} className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Case Studies</a>
                             <a href={homeHref('process')} className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Process</a>
-                            <a href="/partnership/syncrobiz" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">CGT x Syncrobiz</a>
+                            <Link to="/partnership/syncrobiz" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">CGT x Syncrobiz</Link>
                             <a href="#contact" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Contact</a>
                         </div>
                     </div>
@@ -140,10 +143,10 @@ const Footer = () => {
                     <div className="md:col-span-3 flex flex-col">
                         <h4 className="text-[11px] font-semibold tracking-[0.2em] text-[#F4751E]/55 uppercase mb-7">Resources</h4>
                         <div className="flex flex-col gap-4">
-                            <a href="/partnership/syncrobiz" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Partnership Announcement</a>
-                            <a href="/privacy" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Privacy Policy</a>
-                            <a href="/terms" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Terms of Service</a>
-                            <a href="/blog" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Blog</a>
+                            <Link to="/partnership/syncrobiz" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Partnership Announcement</Link>
+                            <Link to="/privacy" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Privacy Policy</Link>
+                            <Link to="/terms" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Terms of Service</Link>
+                            <Link to="/blog" className="text-sm text-white/55 hover:text-white/80 transition-colors duration-300">Blog</Link>
                         </div>
                     </div>
                 </div>
