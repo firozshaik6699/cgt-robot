@@ -41,8 +41,8 @@ const Process = () => {
         offset: ["start end", "end start"],
     });
     
-    // Animate a glowing line down the center
-    const lineHeight = useTransform(scrollYProgress, [0, 0.8], ["0%", "100%"]);
+    // Animate a glowing line down the center using scaleY for better performance
+    const scaleY = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
 
     return (
         <section id="process" className="section-padding relative overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(244,117,30,0.08),transparent_50%),linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(5,3,2,0.9)_20%,rgba(5,5,5,0.95)_80%,rgba(0,0,0,0)_100%)]">
@@ -66,8 +66,8 @@ const Process = () => {
                     {/* The glowing center line */}
                     <div className="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-px bg-white/[0.05] -translate-x-1/2 md:translate-x-0" />
                     <motion.div 
-                        className="absolute left-[28px] md:left-1/2 top-0 w-[2px] bg-gradient-to-b from-transparent via-[#F4751E] to-transparent -translate-x-1/2 md:translate-x-0 origin-top shadow-[0_0_15px_rgba(244,117,30,0.8)]"
-                        style={{ height: lineHeight }}
+                        className="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-[#F4751E] to-transparent -translate-x-1/2 md:translate-x-0 origin-top shadow-[0_0_15px_rgba(244,117,30,0.8)]"
+                        style={{ scaleY }}
                     />
 
                     <div className="flex flex-col gap-12 md:gap-24 relative z-10">
