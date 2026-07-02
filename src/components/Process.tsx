@@ -9,7 +9,7 @@ const steps = [
         title: 'Discover',
         description: 'We dive deep into your business, goals, and technical landscape to understand what needs to be built and why.',
         icon: Compass,
-        image: '/images/process/discover.png',
+        image: '/images/discover.jpg',
     },
     {
         number: '02',
