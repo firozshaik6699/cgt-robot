@@ -2,10 +2,10 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import TrustStrip from './components/TrustStrip'
 import Services from './components/Services'
+import TechStackScroller from './components/TechStackScroller'
 import CaseStudies from './components/CaseStudies'
 import Process from './components/Process'
 import Differentiation from './components/Differentiation'
-import TechStrip from './components/TechStrip'
 import CTA from './components/CTA'
 import ContactModal from './components/ContactModal'
 import Footer from './components/Footer'
@@ -23,7 +23,7 @@ const HomePage = () => (
     <Process />
     <CaseStudies />
     <Differentiation />
-    <TechStrip />
+    <TechStackScroller />
     <CTA />
   </>
 )
