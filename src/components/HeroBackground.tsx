@@ -12,28 +12,7 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
         `
       }}
     >
-      <style>{`
-        @keyframes pulse-glow {
-          0% { opacity: 0.88; }
-          100% { opacity: 1; }
-        }
-        @keyframes drift-dots {
-          0% { transform: translateY(0) rotate(-7deg); }
-          100% { transform: translateY(-8px) rotate(-7deg); }
-        }
-        @keyframes drift-dots-right {
-          0% { transform: translateY(0) rotate(8deg) scaleY(1.05); }
-          100% { transform: translateY(-8px) rotate(8deg) scaleY(1.05); }
-        }
-        @keyframes move-arcs {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-18px); }
-        }
-        @keyframes noise-flicker {
-          0% { opacity: 0.10; }
-          100% { opacity: 0.14; }
-        }
-      `}</style>
+      
 
       {/* Decorative Layers (Behind Content) */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -43,7 +22,7 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
           className="absolute right-[7%] top-[28%] w-[760px] h-[620px] rounded-full blur-[36px] mix-blend-screen max-md:right-[-8%]"
           style={{
             background: 'radial-gradient(circle, rgba(255,106,0,0.95) 0%, rgba(255,72,0,0.55) 30%, rgba(255,72,0,0.16) 58%, transparent 76%)',
-            animation: 'pulse-glow 7s ease-in-out infinite alternate',
+            opacity: 0.94,
           }}
         />
         <div
@@ -69,7 +48,7 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
             backgroundSize: '12px 12px',
             WebkitMaskImage: 'radial-gradient(ellipse at left top, black 0%, black 35%, rgba(0,0,0,0.7) 55%, transparent 82%)',
             maskImage: 'radial-gradient(ellipse at left top, black 0%, black 35%, rgba(0,0,0,0.7) 55%, transparent 82%)',
-            animation: 'drift-dots 12s ease-in-out infinite alternate',
+            transform: 'rotate(-7deg)',
           }}
         />
         <div
@@ -79,7 +58,7 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
             backgroundSize: '16px 16px',
             WebkitMaskImage: 'radial-gradient(ellipse at left top, black 0%, black 30%, rgba(0,0,0,0.5) 50%, transparent 75%)',
             maskImage: 'radial-gradient(ellipse at left top, black 0%, black 30%, rgba(0,0,0,0.5) 50%, transparent 75%)',
-            animation: 'drift-dots 12s ease-in-out infinite alternate',
+            transform: 'rotate(-7deg)',
           }}
         />
 
@@ -91,7 +70,7 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
             backgroundSize: '13px 13px',
             WebkitMaskImage: 'radial-gradient(ellipse at right top, black 0%, black 25%, rgba(0,0,0,0.55) 48%, transparent 75%)',
             maskImage: 'radial-gradient(ellipse at right top, black 0%, black 25%, rgba(0,0,0,0.55) 48%, transparent 75%)',
-            animation: 'drift-dots-right 12s ease-in-out infinite alternate',
+            transform: 'rotate(8deg) scaleY(1.05)',
           }}
         />
         {/* Secondary right dots — lower area */}
@@ -102,7 +81,7 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
             backgroundSize: '15px 15px',
             WebkitMaskImage: 'radial-gradient(ellipse at right center, black 0%, rgba(0,0,0,0.4) 35%, transparent 65%)',
             maskImage: 'radial-gradient(ellipse at right center, black 0%, rgba(0,0,0,0.4) 35%, transparent 65%)',
-            animation: 'drift-dots-right 12s ease-in-out infinite alternate',
+            transform: 'rotate(8deg) scaleY(1.05)',
           }}
         />
 
@@ -115,7 +94,7 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
               radial-gradient(circle at 70% 60%, rgba(255,100,0,0.08) 0 1px, transparent 1px)
             `,
             backgroundSize: '3px 3px, 5px 5px',
-            animation: 'noise-flicker 3s ease-in-out infinite alternate',
+            opacity: 0.12,
           }}
         />
 
@@ -145,7 +124,7 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
           className="absolute left-0 bottom-0 w-full pointer-events-none"
           style={{ 
             height: '55%', 
-            animation: 'move-arcs 10s ease-in-out infinite alternate',
+            transform: 'translateX(-9px)',
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 600' preserveAspectRatio='none' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-200 580 Q 400 320, 960 340 Q 1500 360, 2100 220' stroke='rgba(255, 70, 0, 0.12)' stroke-width='110' stroke-linecap='round'/%3E%3Cpath d='M-200 570 Q 420 290, 980 310 Q 1520 330, 2100 180' stroke='rgba(180, 60, 0, 0.65)' stroke-width='28' stroke-linecap='round'/%3E%3Cpath d='M-200 555 Q 440 275, 1000 295 Q 1540 315, 2100 160' stroke='rgba(255, 120, 20, 1)' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M-200 545 Q 450 265, 1010 285 Q 1550 305, 2100 148' stroke='rgba(255, 150, 50, 0.6)' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M-200 598 Q 380 390, 940 395 Q 1480 400, 2100 310' stroke='rgba(255, 255, 255, 0.75)' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M-200 600 Q 350 420, 900 430 Q 1440 440, 2100 360' stroke='rgba(255, 255, 255, 0.12)' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat'
