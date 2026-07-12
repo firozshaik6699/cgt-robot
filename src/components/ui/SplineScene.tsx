@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Spline from '@splinetool/react-spline'
+import { motion } from 'framer-motion'
 
 interface SplineSceneProps {
   scene: string;
@@ -10,9 +11,18 @@ interface SplineSceneProps {
 
 const SplineScene: React.FC<SplineSceneProps> = ({ scene, className }) => {
   const [isLoaded, setIsLoaded] = useState(false)
+  const [shouldMount, setShouldMount] = useState(false)
   const splineApp = useRef<any>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const isVisibleRef = useRef(true)
+
+  // Internal deferral: wait 1000ms before even rendering the Spline component
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setShouldMount(true)
+    }, 1000)
+    return () => clearTimeout(id)
+  }, [])
 
   const handleLoad = useCallback((app: any) => {
     splineApp.current = app
@@ -58,12 +68,13 @@ const SplineScene: React.FC<SplineSceneProps> = ({ scene, className }) => {
 
   return (
     <div ref={containerRef} className={`w-full h-full relative ${className || ''}`}>
-      {/* Premium Loader */}
+      {/* Standard Loader */}
       {!isLoaded && (
         <div className="w-full h-full flex items-center justify-center absolute inset-0 z-10 bg-transparent">
           <div className="w-8 h-8 border-2 border-white/5 border-t-[#F4751E] rounded-full animate-spin" />
         </div>
       )}
+
       <div 
         className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
         style={{ 
@@ -72,11 +83,13 @@ const SplineScene: React.FC<SplineSceneProps> = ({ scene, className }) => {
           transform: 'translateZ(0)'
         }}
       >
-        <Spline
-          scene={scene}
-          onLoad={handleLoad}
-          style={{ width: '100%', height: '100%' }}
-        />
+        {shouldMount && (
+            <Spline
+              scene={scene}
+              onLoad={handleLoad}
+              style={{ width: '100%', height: '100%' }}
+            />
+        )}
       </div>
     </div>
   )

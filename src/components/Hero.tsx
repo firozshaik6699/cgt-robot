@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState, useEffect } from 'react';
+import { Suspense, lazy } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { ArrowUpRight, Play } from 'lucide-react';
 import Spotlight from "@/components/ui/Spotlight";
@@ -7,19 +7,7 @@ import HeroBackground from './HeroBackground';
 // Lazy load heavy 3D Spline scene
 const SplineScene = lazy(() => import("@/components/ui/SplineScene"));
 
-// Defer Spline mount until after page is interactive
-const useDeferredMount = (delayMs = 2000) => {
-    const [shouldMount, setShouldMount] = useState(false);
-    useEffect(() => {
-        const id = setTimeout(() => setShouldMount(true), delayMs);
-        return () => clearTimeout(id);
-    }, [delayMs]);
-    return shouldMount;
-};
-
 const Hero = () => {
-    const shouldMountSpline = useDeferredMount(400);
-
     const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
@@ -136,25 +124,19 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* Spline 3D Interactive Model — deferred mount + auto-pause when off-screen */}
-            {shouldMountSpline && (
-                <div
-                    className="absolute inset-0 z-0 pointer-events-none animate-fade-in"
-                >
-                    <div className="absolute top-[10%] md:top-0 bottom-0 right-0 w-full lg:w-[60%] pointer-events-none">
-                        <Suspense fallback={
-                            <div className="w-full h-full flex items-center justify-center">
-                                <div className="w-8 h-8 border-2 border-white/5 border-t-[#F4751E] rounded-full animate-spin" />
-                            </div>
-                        }>
-                            <SplineScene
-                                scene="https://res.cloudinary.com/uz4o66yy/raw/upload/v1783878506/cgt-robot/public/spline/scene.splinecode"
-                                className="w-full h-full"
-                            />
-                        </Suspense>
-                    </div>
+            {/* Spline 3D Interactive Model — internal deferral and placeholder */}
+            <div
+                className="absolute inset-0 z-0 pointer-events-none"
+            >
+                <div className="absolute top-[10%] md:top-0 bottom-0 right-0 w-full lg:w-[60%] pointer-events-none">
+                    <Suspense fallback={null}>
+                        <SplineScene
+                            scene="https://res.cloudinary.com/uz4o66yy/raw/upload/v1783878506/cgt-robot/public/spline/scene.splinecode"
+                            className="w-full h-full"
+                        />
+                    </Suspense>
                 </div>
-            )}
+            </div>
         </HeroBackground>
     );
 };
