@@ -38,7 +38,7 @@ const MagneticButton: React.FC<MagneticButtonProps> = ({ children, className, on
             onClick={onClick}
             onMouseMove={handleMouse}
             onMouseLeave={reset}
-            style={{ x: springX, y: springY }}
+            style={{ position: 'relative', x: springX, y: springY }}
             className={`relative pill-shape px-5 py-2 text-xs font-medium text-gray-300 overflow-hidden group border border-white/10 bg-transparent transition-all duration-300 hover:text-white hover:bg-white/5 flex items-center gap-2 ${className || ''}`}
         >
             <span className="relative z-10 flex items-center gap-1.5">

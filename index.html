@@ -6,10 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Continental Grand Technologies | Digital Engineering Studio</title>
     <meta name="description" content="CGT is a digital engineering studio building high-performance software systems, AI automation, and enterprise platforms for businesses that demand precision." />
+    <meta name="keywords" content="AI Automation, Full-Stack Software Engineering, Enterprise SaaS, React Development, Python AI Agents, CRM Systems, Hyderabad Software Studio" />
+    <meta name="author" content="Continental Grand Technologies" />
     <meta name="theme-color" content="#000000" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cgt-robot.vercel.app/" />
     <meta property="og:title" content="Continental Grand Technologies | Digital Engineering Studio" />
     <meta property="og:description" content="Full-stack development, AI automation, and enterprise systems — engineered for businesses that demand precision and performance." />
-    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Continental Grand Technologies" />
+    <meta property="og:image" content="https://res.cloudinary.com/uz4o66yy/image/upload/v1783877301/cgt-robot/public/images/og-cover.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@CGT_OFFICIAI_" />
+    <meta name="twitter:title" content="Continental Grand Technologies | Digital Engineering Studio" />
+    <meta name="twitter:description" content="Full-stack development, AI automation, and enterprise platforms built to scale." />
+    <meta name="twitter:image" content="https://res.cloudinary.com/uz4o66yy/image/upload/v1783877301/cgt-robot/public/images/og-cover.jpg" />
+
+    <link rel="canonical" href="https://cgt-robot.vercel.app/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+
+    <!-- JSON-LD Structured Data for Organization & Studio -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "Continental Grand Technologies",
+        "url": "https://cgt-robot.vercel.app",
+        "logo": "https://res.cloudinary.com/uz4o66yy/image/upload/v1783877301/cgt-robot/public/images/logo.png",
+        "description": "Digital engineering studio specializing in full-stack software development, custom AI automation, and enterprise systems.",
+        "telephone": "+919398404167",
+        "email": "continentalgrandtechnologies@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Hyderabad",
+          "addressRegion": "Telangana",
+          "addressCountry": "IN"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/company/continental-grand-technologies",
+          "https://x.com/CGT_OFFICIAI_",
+          "https://www.instagram.com/continentalgrandtechnologies/",
+          "https://github.com/continental-grand-technologies"
+        ]
+      }
+    </script>
     <style>
       body, html {
         margin: 0;
@@ -19,32 +65,15 @@
         height: 100%;
       }
       .initial-loader {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         width: 100vw;
         height: 100vh;
         background-color: #000000;
-      }
-      .initial-spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid rgba(255, 255, 255, 0.05);
-        border-top-color: #F4751E;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
       }
     </style>
   </head>
   <body>
     <div id="root">
-      <div class="initial-loader">
-        <div class="initial-spinner"></div>
-      </div>
+      <div class="initial-loader"></div>
     </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

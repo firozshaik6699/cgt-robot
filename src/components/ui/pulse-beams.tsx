@@ -93,7 +93,7 @@ const SVGs = ({ beams, width, height, baseColor, accentColor, gradientColors }: 
       viewBox={`0 0 ${width} ${height}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="flex flex-shrink-0"
+      className="flex flex-shrink-0 max-w-full h-auto"
     >
       {beams.map((beam: any, index: number) => (
         <React.Fragment key={index}>

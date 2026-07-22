@@ -1,6 +1,6 @@
 import * as React from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { SquareArrowOutUpRight } from "lucide-react";
+import { SquareArrowOutUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 function cn(...classes: Array<string | undefined | null | false>) {
   return classes.filter(Boolean).join(" ");
@@ -117,6 +117,25 @@ export function CardStack<T extends CardStackItem>({
   const reduceMotion = useReducedMotion();
   const len = items.length;
 
+  const [windowWidth, setWindowWidth] = React.useState(() => 
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Compute responsive card width & height (allowing side cards to peek out clearly on mobile)
+  const isMobile = windowWidth < 640;
+  const currentCardWidth = isMobile ? Math.max(260, Math.min(cardWidth, windowWidth - 72)) : cardWidth;
+  const currentCardHeight = isMobile ? Math.round(currentCardWidth * 0.64) : cardHeight;
+  const currentSpreadDeg = isMobile ? 32 : spreadDeg;
+  const currentOverlap = isMobile ? 0.54 : overlap;
+
   const [active, setActive] = React.useState(() =>
     wrapIndex(initialIndex, len),
   );
@@ -135,8 +154,8 @@ export function CardStack<T extends CardStackItem>({
 
   const maxOffset = Math.max(0, Math.floor(maxVisible / 2));
 
-  const cardSpacing = Math.max(10, Math.round(cardWidth * (1 - overlap)));
-  const stepDeg = maxOffset > 0 ? spreadDeg / maxOffset : 0;
+  const cardSpacing = Math.max(10, Math.round(currentCardWidth * (1 - currentOverlap)));
+  const stepDeg = maxOffset > 0 ? currentSpreadDeg / maxOffset : 0;
 
   const canGoPrev = loop || active > 0;
   const canGoNext = loop || active < len - 1;
@@ -192,14 +211,14 @@ export function CardStack<T extends CardStackItem>({
 
   return (
     <div
-      className={cn("w-full", className)}
+      className={cn("w-full relative", className)}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
       {/* Stage */}
       <div
-        className="relative w-full"
-        style={{ height: Math.max(380, cardHeight + 80) }}
+        className="relative w-full overflow-hidden sm:overflow-visible"
+        style={{ height: Math.max(isMobile ? 290 : 380, currentCardHeight + (isMobile ? 40 : 80)) }}
         tabIndex={0}
         onKeyDown={onKeyDown}
       >
@@ -231,13 +250,13 @@ export function CardStack<T extends CardStackItem>({
               // fan geometry
               const rotateZ = off * stepDeg;
               const x = off * cardSpacing;
-              const y = abs * 10; // subtle arc-down feel
-              const z = -abs * depthPx;
+              const y = abs * (isMobile ? 8 : 10); // subtle arc-down feel
+              const z = -abs * (isMobile ? 100 : depthPx);
 
               const isActive = off === 0;
 
-              const scale = isActive ? activeScale : inactiveScale;
-              const lift = isActive ? -activeLiftPx : 0;
+              const scale = isActive ? activeScale : (isMobile ? 0.90 : inactiveScale);
+              const lift = isActive ? (isMobile ? -14 : -activeLiftPx) : 0;
 
               const rotateX = isActive ? 0 : tiltXDeg;
 
@@ -256,7 +275,7 @@ export function CardStack<T extends CardStackItem>({
                       if (reduceMotion) return;
                       const travel = info.offset.x;
                       const v = info.velocity.x;
-                      const threshold = Math.min(160, cardWidth * 0.22);
+                      const threshold = Math.min(160, currentCardWidth * 0.22);
 
                       // swipe logic
                       if (travel > threshold || v > 650) prev();
@@ -276,8 +295,8 @@ export function CardStack<T extends CardStackItem>({
                       : "cursor-pointer",
                   )}
                   style={{
-                    width: cardWidth,
-                    height: cardHeight,
+                    width: currentCardWidth,
+                    height: currentCardHeight,
                     zIndex,
                     transformStyle: "preserve-3d",
                   }}
@@ -329,9 +348,17 @@ export function CardStack<T extends CardStackItem>({
         </div>
       </div>
 
-      {/* Dots navigation centered at bottom */}
+      {/* Dots & Touch Navigation controls at bottom */}
       {showDots ? (
-        <div className="mt-6 flex items-center justify-center gap-3">
+        <div className="mt-5 flex items-center justify-center gap-4">
+          <button
+            onClick={prev}
+            className="p-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:border-white/20 active:scale-95 transition-all"
+            aria-label="Previous Project Card"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+
           <div className="flex items-center gap-2">
             {items.map((it, idx) => {
               const on = idx === active;
@@ -340,22 +367,31 @@ export function CardStack<T extends CardStackItem>({
                   key={it.id}
                   onClick={() => setActive(idx)}
                   className={cn(
-                    "h-2 w-2 rounded-full transition",
+                    "h-2 rounded-full transition-all duration-300",
                     on
-                      ? "bg-foreground"
-                      : "bg-foreground/30 hover:bg-foreground/50",
+                      ? "w-6 bg-[#F4751E]"
+                      : "w-2 bg-foreground/30 hover:bg-foreground/50",
                   )}
                   aria-label={`Go to ${it.title}`}
                 />
               );
             })}
           </div>
+
+          <button
+            onClick={next}
+            className="p-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:border-white/20 active:scale-95 transition-all"
+            aria-label="Next Project Card"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+
           {activeItem.href ? (
             <a
               href={activeItem.href}
               target="_blank"
               rel="noreferrer"
-              className="text-muted-foreground hover:text-foreground transition"
+              className="text-muted-foreground hover:text-foreground transition ml-1"
               aria-label="Open link"
             >
               <SquareArrowOutUpRight className="h-4 w-4" />
