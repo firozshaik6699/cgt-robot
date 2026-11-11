@@ -1,5 +1,9 @@
 import { ArrowUpRight, BadgeCheck, CheckCircle2, Globe2, Handshake, Layers3, Megaphone, Network, ShieldCheck, Workflow } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Reveal from '@/components/ui/Reveal';
+import SEO from '@/components/seo/SEO';
+import { Button } from '@/components/ui/button';
+import { openContactModal } from '@/hooks/useHashModal';
 import logo from '@/assets/logo_metallic_transparent.png';
 import syncrobizLogo from '@/assets/syncrobiz_logo_transparent.png';
 
@@ -98,8 +102,17 @@ const serviceTones = [
 const outcomeLabels = ['Access', 'Clarity', 'Systems'];
 
 const SyncrobizPartnership = () => {
+    const handlePartnershipInquiry = () => {
+        openContactModal('Strategic Partnership / Technical Consultation');
+    };
+
     return (
         <main>
+            <SEO
+                title="CGT × Syncrobiz Strategic Partnership"
+                description="Continental Grand Technologies (cgtofficial.com) partners with Syncrobiz to expand enterprise and SMB access to AI automation, CRM systems, and full-stack software engineering."
+                path="/partnership/syncrobiz"
+            />
             <section className="relative isolate min-h-[92vh] flex items-center pt-32 pb-20 px-4 overflow-hidden">
                 <div className="absolute inset-x-0 top-24 mx-auto h-px max-w-5xl bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                 <div className="absolute left-1/2 top-1/4 h-72 w-72 -translate-x-1/2 rounded-full bg-[#F4751E]/[0.055] blur-[90px] pointer-events-none" style={{ contain: 'strict' }} />
@@ -125,15 +138,27 @@ const SyncrobizPartnership = () => {
                                     Continental Grand Technologies is entering a professional collaboration with Syncrobiz to expand access to modern digital services through a trusted reseller and business-development partnership.
                                 </p>
 
-                                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                                    <a href="#contact" className="group w-full sm:w-auto justify-center px-8 py-3.5 rounded-full bg-[#F4751E] text-white font-semibold text-sm hover:bg-[#e06815] transition-all duration-300 shadow-[0_12px_35px_rgba(244,117,30,0.22)] hover:shadow-[0_16px_45px_rgba(244,117,30,0.32)] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F4751E]/60 flex items-center gap-3">
-                                        Discuss a project
+                                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                                    <Button
+                                        type="button"
+                                        size="lg"
+                                        onClick={handlePartnershipInquiry}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <span>Discuss a Project</span>
                                         <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                                    </a>
-                                    <a href="https://syncrobiz.vercel.app/" target="_blank" rel="noreferrer" className="group w-full sm:w-auto justify-center px-8 py-3.5 rounded-full border border-white/10 bg-white/[0.03] text-white/75 hover:text-white hover:bg-white/[0.06] hover:border-white/16 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/30 flex items-center gap-3 text-sm font-semibold backdrop-blur-xl">
-                                        Visit Syncrobiz
-                                        <Globe2 className="h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
-                                    </a>
+                                    </Button>
+                                    <Button
+                                        asChild
+                                        variant="secondary"
+                                        size="lg"
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <a href="https://syncrobiz.vercel.app/" target="_blank" rel="noreferrer">
+                                            <span>Visit Syncrobiz</span>
+                                            <Globe2 className="h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
+                                        </a>
+                                    </Button>
                                 </div>
                             </div>
                         </Reveal>
@@ -160,7 +185,7 @@ const SyncrobizPartnership = () => {
                                             <div className="relative z-10 flex-1 w-full sm:w-auto overflow-hidden rounded-2xl border border-white/[0.06] bg-black/60 p-6 min-h-[130px] flex items-center justify-center transition-all duration-500 hover:border-white/[0.15] hover:bg-black/40 group/logo shadow-lg">
                                                 <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-0 transition-opacity duration-500 group-hover/logo:opacity-100" />
                                                 <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover/logo:via-[#F4751E]/50" />
-                                                <img src={logo} alt="Continental Grand Technologies logo" className="h-16 md:h-20 w-auto object-contain brightness-125 contrast-125 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 group-hover/logo:scale-110" />
+                                                <img src={logo} alt="Continental Grand Technologies logo" className="h-11 sm:h-13 md:h-14 w-auto object-contain brightness-105 contrast-105 drop-shadow-[0_0_16px_rgba(244,117,30,0.18)] transition-transform duration-500 group-hover/logo:scale-105" />
                                             </div>
 
                                             <div className="relative z-20 mx-auto flex h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0 items-center justify-center rounded-full border border-[#F4751E]/25 bg-black/80 text-[#F4751E] shadow-[0_0_30px_rgba(244,117,30,0.15)] overflow-hidden group/icon backdrop-blur-md transition-all duration-500 hover:scale-110 hover:border-[#F4751E]/40 hover:shadow-[0_0_40px_rgba(244,117,30,0.3)]">
@@ -364,10 +389,14 @@ const SyncrobizPartnership = () => {
                                 <p className="text-base text-white/55 leading-relaxed max-w-xl font-light mb-8">
                                     CGT's delivery focus remains the same: useful, scalable systems that help organizations operate faster, serve customers better, and reduce manual work.
                                 </p>
-                                <a href="#contact" className="inline-flex items-center gap-2 text-sm font-semibold text-[#F4751E]/75 hover:text-[#F4751E] transition-colors duration-300 group">
-                                    Start a partnership-led project
+                                <Button
+                                    type="button"
+                                    variant="accent"
+                                    onClick={handlePartnershipInquiry}
+                                >
+                                    <span>Start a Partnership-Led Project</span>
                                     <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-                                </a>
+                                </Button>
                             </div>
                         </Reveal>
 
@@ -404,14 +433,24 @@ const SyncrobizPartnership = () => {
                             <p className="relative text-base md:text-lg text-white/55 mb-10 max-w-2xl mx-auto leading-relaxed font-light">
                                 For clients and business communities connected through Syncrobiz, CGT is ready to deliver digital systems with care, clarity, and long-term engineering focus.
                             </p>
-                            <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4">
-                                <a href="#contact" className="group w-full sm:w-auto px-10 py-4 rounded-full bg-[#F4751E] text-white font-semibold text-base hover:bg-[#e06815] transition-all duration-300 shadow-[0_15px_40px_rgba(244,117,30,0.2)] hover:shadow-[0_20px_50px_rgba(244,117,30,0.3)] hover:-translate-y-1 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F4751E]/60 flex items-center justify-center gap-3">
-                                    Contact CGT
+                            <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5">
+                                <Button
+                                    type="button"
+                                    size="xl"
+                                    onClick={handlePartnershipInquiry}
+                                    className="w-full sm:w-auto"
+                                >
+                                    <span>Contact CGT</span>
                                     <ArrowUpRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                                </a>
-                                <a href="/" className="w-full sm:w-auto px-10 py-4 rounded-full bg-white/[0.03] border border-white/[0.08] text-white/70 hover:text-white font-semibold text-base hover:bg-white/[0.06] hover:border-white/15 transition-all duration-300 hover:-translate-y-1 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/30 flex justify-center items-center">
-                                    Explore CGT
-                                </a>
+                                </Button>
+                                <Button
+                                    asChild
+                                    variant="secondary"
+                                    size="xl"
+                                    className="w-full sm:w-auto"
+                                >
+                                    <Link to="/">Explore CGT</Link>
+                                </Button>
                             </div>
                         </div>
                     </Reveal>

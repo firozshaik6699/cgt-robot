@@ -350,10 +350,11 @@ export function CardStack<T extends CardStackItem>({
 
       {/* Dots & Touch Navigation controls at bottom */}
       {showDots ? (
-        <div className="mt-5 flex items-center justify-center gap-4">
+        <div className="mt-6 flex items-center justify-center gap-3.5">
           <button
+            type="button"
             onClick={prev}
-            className="p-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:border-white/20 active:scale-95 transition-all"
+            className="h-11 w-11 rounded-full border border-white/[0.12] bg-black/60 backdrop-blur-md text-white/80 hover:text-white hover:bg-white/[0.08] hover:border-[#F4751E]/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] active:scale-95 transition-all flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4751E]/60"
             aria-label="Previous Project Card"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -364,12 +365,13 @@ export function CardStack<T extends CardStackItem>({
               const on = idx === active;
               return (
                 <button
+                  type="button"
                   key={it.id}
                   onClick={() => setActive(idx)}
                   className={cn(
-                    "h-2 rounded-full transition-all duration-300",
+                    "h-2 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4751E]/60",
                     on
-                      ? "w-6 bg-[#F4751E]"
+                      ? "w-7 bg-[#F4751E]"
                       : "w-2 bg-foreground/30 hover:bg-foreground/50",
                   )}
                   aria-label={`Go to ${it.title}`}
@@ -379,8 +381,9 @@ export function CardStack<T extends CardStackItem>({
           </div>
 
           <button
+            type="button"
             onClick={next}
-            className="p-2 rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white hover:border-white/20 active:scale-95 transition-all"
+            className="h-11 w-11 rounded-full border border-white/[0.12] bg-black/60 backdrop-blur-md text-white/80 hover:text-white hover:bg-white/[0.08] hover:border-[#F4751E]/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] active:scale-95 transition-all flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4751E]/60"
             aria-label="Next Project Card"
           >
             <ChevronRight className="h-4 w-4" />
@@ -391,10 +394,11 @@ export function CardStack<T extends CardStackItem>({
               href={activeItem.href}
               target="_blank"
               rel="noreferrer"
-              className="text-muted-foreground hover:text-foreground transition ml-1"
-              aria-label="Open link"
+              className="h-11 px-4 rounded-full border border-[#F4751E]/30 bg-[#F4751E]/[0.1] hover:bg-[#F4751E] text-[#FF9B54] hover:text-white text-xs font-semibold transition-all duration-300 flex items-center gap-1.5 ml-1 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4751E]/60"
+              aria-label={`Open live deployment of ${activeItem.title}`}
             >
-              <SquareArrowOutUpRight className="h-4 w-4" />
+              <span className="hidden sm:inline">Live Preview</span>
+              <SquareArrowOutUpRight className="h-3.5 w-3.5" />
             </a>
           ) : null}
         </div>

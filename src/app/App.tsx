@@ -5,6 +5,7 @@ import SyncrobizPartnership from '@/pages/SyncrobizPartnership';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
 import Blog from '@/pages/Blog';
+import NotFound from '@/pages/NotFound';
 
 function App() {
     return (
@@ -16,7 +17,7 @@ function App() {
                     <Route path="/privacy" element={<PrivacyPolicy />} />
                     <Route path="/terms" element={<TermsOfService />} />
                     <Route path="/blog" element={<Blog />} />
-                    <Route path="*" element={<HomePage />} />
+                    <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
         </Router>

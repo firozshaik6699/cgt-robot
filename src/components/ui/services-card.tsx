@@ -2,13 +2,14 @@
 
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import useEmblaCarousel from "embla-carousel-react";
 import { Button } from "@/components/ui/button";
+import { openContactModal } from "@/hooks/useHashModal";
+import type { Service } from "@/types";
 
-// --- Carousel Context ---
 type CarouselApi = ReturnType<typeof useEmblaCarousel>[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
 type CarouselOptions = UseCarouselParameters[0];
@@ -38,7 +39,6 @@ function useCarousel() {
   return context;
 }
 
-// --- Main Carousel Component ---
 const Carousel = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & CarouselProps
@@ -136,7 +136,6 @@ const Carousel = React.forwardRef<
 );
 Carousel.displayName = "Carousel";
 
-// --- Carousel Content ---
 const CarouselContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -158,7 +157,6 @@ const CarouselContent = React.forwardRef<
 });
 CarouselContent.displayName = "CarouselContent";
 
-// --- Carousel Item ---
 const CarouselItem = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -180,7 +178,6 @@ const CarouselItem = React.forwardRef<
 });
 CarouselItem.displayName = "CarouselItem";
 
-// --- Carousel Controls ---
 const CarouselPrevious = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
@@ -189,13 +186,11 @@ const CarouselPrevious = React.forwardRef<
   return (
     <Button
       ref={ref}
+      type="button"
       variant={variant}
       size={size}
       aria-label="Previous service slide"
-      className={cn(
-        "h-10 w-10 rounded-full border border-white/10 bg-black/60 backdrop-blur-md hover:bg-black/90 text-white transition-all active:scale-95 disabled:opacity-30",
-        className,
-      )}
+      className={cn("disabled:opacity-30", className)}
       onClick={scrollPrev}
       disabled={!canScrollPrev}
       {...props}
@@ -215,13 +210,11 @@ const CarouselNext = React.forwardRef<
   return (
     <Button
       ref={ref}
+      type="button"
       variant={variant}
       size={size}
       aria-label="Next service slide"
-      className={cn(
-        "h-10 w-10 rounded-full border border-white/10 bg-black/60 backdrop-blur-md hover:bg-black/90 text-white transition-all active:scale-95 disabled:opacity-30",
-        className,
-      )}
+      className={cn("disabled:opacity-30", className)}
       onClick={scrollNext}
       disabled={!canScrollNext}
       {...props}
@@ -233,17 +226,6 @@ const CarouselNext = React.forwardRef<
 });
 CarouselNext.displayName = "CarouselNext";
 
-// --- Service Card & Carousel Section ---
-export interface Service {
-  number: string;
-  title: string;
-  description: string;
-  icon: React.ElementType;
-  gradient: string;
-  image?: string;
-}
-
-// Sub-component for individual cards
 const ServiceCard = ({ service, index }: { service: Service; index: number }) => {
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -260,47 +242,68 @@ const ServiceCard = ({ service, index }: { service: Service; index: number }) =>
   return (
     <motion.div
       variants={cardVariants}
+      onClick={() => openContactModal(service.modalCategory)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openContactModal(service.modalCategory);
+        }
+      }}
       className={cn(
-        "group relative flex h-[400px] sm:h-[450px] w-full flex-col justify-between overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r border border-white/10",
+        "group relative flex h-[400px] sm:h-[440px] w-full cursor-pointer flex-col justify-between overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r border border-white/[0.1] hover:border-[#F4751E]/40 transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4751E]/60",
         service.image ? "" : service.gradient
       )}
     >
       {service.image && (
-        <div 
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" 
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
           style={{ backgroundImage: `url(${service.image})` }}
         />
       )}
-      
-      {/* Dark overlay for readability over images */}
-      <div className={cn(
-        "absolute inset-0 transition-colors duration-500 z-0",
-        service.image ? "bg-black/65 group-hover:bg-black/45" : "bg-gradient-to-t from-background/30 to-transparent"
-      )}></div>
 
-      {/* Card Content */}
-      <div className="z-10 flex flex-col items-start text-left">
-        <span className={cn("mb-6 sm:mb-8 text-xs sm:text-sm font-mono tracking-wider", service.image ? "text-white/80" : "text-foreground/60")}>
-          ( {service.number} )
+      {/* Layered dark vignette for effortless legibility */}
+      <div
+        className={cn(
+          "absolute inset-0 transition-opacity duration-500 z-0",
+          service.image
+            ? "bg-gradient-to-t from-black/92 via-black/62 to-black/38 group-hover:from-black/88 group-hover:via-black/52"
+            : "bg-gradient-to-t from-background/30 to-transparent"
+        )}
+      />
+
+      {/* Top Specular Edge */}
+      <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-60 group-hover:via-[#F4751E]/60 transition-all duration-500 z-10" />
+
+      {/* Header Metadata */}
+      <div className="z-10 flex items-center justify-between w-full">
+        <span className="text-xs font-mono tracking-wider text-white/70 bg-black/45 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+          {service.number}
         </span>
-        <service.icon className={cn("mb-auto h-10 w-10 sm:h-12 sm:w-12 text-[#F4751E]", service.image ? "text-[#F4751E]" : "text-foreground")} />
+        <div className="h-10 w-10 rounded-2xl bg-black/50 backdrop-blur-md border border-white/10 group-hover:border-[#F4751E]/40 flex items-center justify-center transition-colors duration-300">
+          <service.icon className="h-5 w-5 text-[#F4751E]" />
+        </div>
       </div>
-      <div className={cn("z-10", service.image ? "text-white" : "text-foreground")}>
-        <h3 className="mb-2 text-base sm:text-lg font-bold uppercase tracking-wider text-white">
+
+      {/* Copy & Tactile Action */}
+      <div className="z-10 text-left">
+        <h3 className="mb-2 text-base sm:text-lg font-bold tracking-tight text-white">
           {service.title}
         </h3>
-        <p className={cn("text-xs sm:text-sm leading-relaxed", service.image ? "text-white/85 font-light" : "text-foreground/80")}>{service.description}</p>
-        
-        <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-[#F4751E] group-hover:translate-x-1 transition-transform duration-300">
-          <span>Explore Solution</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </div>
+        <p className="text-xs sm:text-sm leading-relaxed text-white/78 font-light mb-5">
+          {service.description}
+        </p>
+
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-[#F4751E]/30 bg-[#F4751E]/[0.12] px-3.5 py-1.5 text-xs font-semibold text-[#FF9B54] group-hover:bg-[#F4751E] group-hover:border-[#FFA364]/50 group-hover:text-white transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+          <span>Scope This Capability</span>
+          <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </span>
       </div>
     </motion.div>
   );
 };
 
-// Main exportable component
 export const ServiceCarousel = ({ services }: { services: Service[] }) => {
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
@@ -316,24 +319,24 @@ export const ServiceCarousel = ({ services }: { services: Service[] }) => {
         className="relative"
       >
         <motion.div
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            transition={{ staggerChildren: 0.1 }}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          transition={{ staggerChildren: 0.1 }}
         >
-            <CarouselContent>
+          <CarouselContent>
             {services.map((service, index) => (
-                <CarouselItem key={index} className="basis-full sm:basis-1/2 lg:basis-1/3">
+              <CarouselItem key={service.number} className="basis-full sm:basis-1/2 lg:basis-1/3">
                 <div className="p-1 sm:p-2">
-                    <ServiceCard service={service} index={index} />
+                  <ServiceCard service={service} index={index} />
                 </div>
-                </CarouselItem>
+              </CarouselItem>
             ))}
-            </CarouselContent>
+          </CarouselContent>
         </motion.div>
 
-        {/* Navigation Buttons Row */}
+        {/* Tactile Carousel Controls */}
         <div className="mt-6 flex items-center justify-end gap-3 px-2">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <CarouselPrevious />
             <CarouselNext />
           </div>

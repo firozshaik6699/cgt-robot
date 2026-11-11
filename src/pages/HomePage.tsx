@@ -1,3 +1,4 @@
+import SEO from '@/components/seo/SEO';
 import Hero from '@/components/sections/Hero';
 import TrustStrip from '@/components/sections/TrustStrip';
 import Services from '@/components/sections/Services';
@@ -10,6 +11,7 @@ import CTA from '@/components/sections/CTA';
 
 const HomePage = () => (
     <>
+        <SEO path="/" />
         <Hero />
         <TrustStrip />
         <Services />

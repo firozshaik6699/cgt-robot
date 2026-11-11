@@ -8,6 +8,7 @@ export interface Service {
   icon: React.ElementType;
   gradient: string;
   image?: string;
+  modalCategory?: string;
 }
 
 // ─── Process Step ──────────────────────────────────────────
@@ -80,6 +81,9 @@ export interface SocialLink {
 
 export interface SiteConfig {
   companyName: string;
+  shortName: string;
+  domain: string;
+  siteUrl: string;
   tagline: string;
   description: string;
   phone: string;

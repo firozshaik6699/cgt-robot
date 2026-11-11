@@ -3,7 +3,7 @@ import React from 'react';
 const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string }> = ({ children, className = '' }) => {
   return (
     <section
-      className={`relative min-h-screen w-full overflow-hidden bg-[#030303] ${className}`}
+      className={`relative min-h-[100svh] w-full overflow-hidden bg-[#030303] ${className}`}
       style={{
         background: `
           radial-gradient(circle at 78% 43%, rgba(255, 95, 0, 0.95) 0%, rgba(255, 83, 0, 0.72) 14%, rgba(122, 35, 0, 0.48) 31%, rgba(12, 6, 3, 0.92) 58%, #030303 100%),
@@ -114,10 +114,10 @@ const HeroBackground: React.FC<{ children?: React.ReactNode; className?: string 
           style={{ background: 'rgba(255,255,255,0.15)' }}
         />
 
-        {/* Texture / Smoke Layer */}
-        <div className="absolute left-[30%] top-[28%] w-[420px] h-[260px] rounded-full blur-[70px] mix-blend-screen bg-[rgba(255,165,0,0.08)]" />
-        <div className="absolute left-[43%] top-[42%] w-[580px] h-[310px] rounded-full blur-[90px] mix-blend-screen bg-[rgba(255,165,0,0.11)]" />
-        <div className="absolute right-[8%] bottom-[10%] w-[520px] h-[260px] rounded-full blur-[70px] mix-blend-multiply bg-[rgba(0,0,0,0.28)]" />
+        {/* Texture / Smoke Layer — hidden on mobile to preserve iOS WebGL GPU memory headroom */}
+        <div className="max-md:hidden absolute left-[30%] top-[28%] w-[420px] h-[260px] rounded-full blur-[70px] mix-blend-screen bg-[rgba(255,165,0,0.08)]" />
+        <div className="max-md:hidden absolute left-[43%] top-[42%] w-[580px] h-[310px] rounded-full blur-[90px] mix-blend-screen bg-[rgba(255,165,0,0.11)]" />
+        <div className="max-md:hidden absolute right-[8%] bottom-[10%] w-[520px] h-[260px] rounded-full blur-[70px] mix-blend-multiply bg-[rgba(0,0,0,0.28)]" />
 
         {/* Lower Curved Motion Lines / Arcs */}
         <div

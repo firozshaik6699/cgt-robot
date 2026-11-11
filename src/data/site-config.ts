@@ -2,8 +2,11 @@ import type { SiteConfig } from '@/types';
 
 export const siteConfig: SiteConfig = {
     companyName: 'Continental Grand Technologies',
+    shortName: 'CGT',
+    domain: 'cgtofficial.com',
+    siteUrl: 'https://cgtofficial.com',
     tagline: 'Digital Engineering Studio',
-    description: 'Digital engineering studio building high-performance software systems, AI automation, and enterprise platforms.',
+    description: 'Engineering production-grade software platforms, autonomous AI workflows, and scalable enterprise systems.',
     phone: '+91 93984 04167',
     email: 'continentalgrandtechnologies@gmail.com',
     whatsappUrl: 'https://wa.me/919398404167',
@@ -29,7 +32,7 @@ export const siteConfig: SiteConfig = {
             platform: 'Instagram',
             url: 'https://www.instagram.com/continentalgrandtechnologies/',
             ariaLabel: 'Instagram',
-            svgPath: 'M2 2h20v20H2z M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z M17.5 6.5h.01',
+            svgPath: 'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z M17.5 6.5h.01',
         },
         {
             platform: 'GitHub',

@@ -11,38 +11,33 @@ export const desktopNavLinks: NavLink[] = [
 export const mobileNavLinks: NavLink[] = [
     { label: 'Services', href: 'services' },
     { label: 'Process', href: 'process' },
-    { label: 'Case Studies / Work', href: 'work' },
-    { label: 'CGT x Syncrobiz Partnership', href: '/partnership/syncrobiz', isRouterLink: true },
-    { label: 'Blog & Insights', href: '/blog', isRouterLink: true },
+    { label: 'Case Studies & Work', href: 'work' },
+    { label: 'CGT × Syncrobiz Partnership', href: '/partnership/syncrobiz', isRouterLink: true },
+    { label: 'Engineering Blog', href: '/blog', isRouterLink: true },
 ];
 
 export const footerSections: FooterSection[] = [
     {
-        title: 'Company',
+        title: 'Studio',
         links: [
-            { label: 'Services', href: 'services' },
-            { label: 'Case Studies', href: 'work' },
-            { label: 'Process', href: 'process' },
-            { label: 'CGT x Syncrobiz', href: '/partnership/syncrobiz', isRouterLink: true },
-            { label: 'Contact', href: 'contact' },
+            { label: 'Capabilities', href: 'services' },
+            { label: 'Architecture Process', href: 'process' },
+            { label: 'Selected Work', href: 'work' },
+            { label: 'Start a Project', href: 'contact' },
         ],
     },
     {
-        title: 'Services',
+        title: 'Ecosystem',
         links: [
-            { label: 'AI Automation', href: 'services' },
-            { label: 'Full Stack Dev', href: 'services' },
-            { label: 'CRM Systems', href: 'services' },
-            { label: 'AI Bots', href: 'services' },
+            { label: 'CGT × Syncrobiz', href: '/partnership/syncrobiz', isRouterLink: true },
+            { label: 'Engineering Insights', href: '/blog', isRouterLink: true },
         ],
     },
     {
-        title: 'Resources',
+        title: 'Legal',
         links: [
-            { label: 'Partnership Announcement', href: '/partnership/syncrobiz', isRouterLink: true },
             { label: 'Privacy Policy', href: '/privacy', isRouterLink: true },
             { label: 'Terms of Service', href: '/terms', isRouterLink: true },
-            { label: 'Blog', href: '/blog', isRouterLink: true },
         ],
     },
 ];
