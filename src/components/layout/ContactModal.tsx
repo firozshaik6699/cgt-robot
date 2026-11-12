@@ -1,25 +1,121 @@
-import { useState, useEffect } from 'react';
-import { Mail, Loader2, CheckCircle2, ChevronDown, X, ArrowUpRight } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import {
+    Mail,
+    Loader2,
+    CheckCircle2,
+    ChevronDown,
+    X,
+    ArrowUpRight,
+    Info,
+    MessageCircle,
+    Copy,
+    Check,
+    ArrowLeft,
+} from 'lucide-react';
 import { useHashModal } from '@/hooks/useHashModal';
 import { Button } from '@/components/ui/button';
+import { getSessionItem, setSessionItem, removeSessionItem } from '@/lib/storage';
+
+const DRAFT_STORAGE_KEY = 'cgt_contact_draft_v1';
+const WHATSAPP_NUMBER = '919398404167';
+const DIRECT_EMAIL = 'continentalgrandtechnologies@gmail.com';
+
+interface ContactDraft {
+    name: string;
+    email: string;
+    service: string;
+    budget: string;
+    message: string;
+}
+
+const EMPTY_DRAFT: ContactDraft = {
+    name: '',
+    email: '',
+    service: '',
+    budget: '',
+    message: '',
+};
+
+const CURRENCY_QUICK_CHIPS = [
+    { label: '₹ INR', prefix: '₹ ', suffix: ' INR' },
+    { label: '$ USD', prefix: '$', suffix: ' USD' },
+    { label: 'AED', prefix: 'AED ', suffix: '' },
+    { label: '€ EUR', prefix: '€', suffix: ' EUR' },
+    { label: 'Flexible / Discuss', fullValue: 'Flexible — Open to Discuss (INR / USD)' },
+] as const;
+
+function buildFormattedBrief(draft: ContactDraft): string {
+    return [
+        'Hello CGT Engineering Team,',
+        '',
+        'Here is my project inquiry from cgtofficial.com:',
+        `• Name: ${draft.name}`,
+        `• Work Email: ${draft.email}`,
+        `• Capability: ${draft.service}`,
+        `• Estimated Budget: ${draft.budget}`,
+        '',
+        'Project Scope & Timeline:',
+        draft.message,
+    ].join('\n');
+}
 
 const ContactModal = () => {
     const { isOpen, close: closeModal, preselectedService, setPreselectedService } = useHashModal('contact');
-    const [selectedService, setSelectedService] = useState<string>('');
+    const [draft, setDraft] = useState<ContactDraft>(() =>
+        getSessionItem<ContactDraft>(DRAFT_STORAGE_KEY, EMPTY_DRAFT)
+    );
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [directDispatchMode, setDirectDispatchMode] = useState(false);
+    const [copiedBrief, setCopiedBrief] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const budgetInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (preselectedService) {
-            setSelectedService(preselectedService);
+            setDraft((prev) => ({ ...prev, service: preselectedService }));
         }
     }, [preselectedService]);
+
+    useEffect(() => {
+        setSessionItem(DRAFT_STORAGE_KEY, draft);
+    }, [draft]);
+
+    const updateField = <K extends keyof ContactDraft>(key: K, value: ContactDraft[K]) => {
+        setDraft((prev) => ({ ...prev, [key]: value }));
+        if (errorMessage) setErrorMessage(null);
+    };
+
+    const applyCurrencyChip = (chip: (typeof CURRENCY_QUICK_CHIPS)[number]) => {
+        if ('fullValue' in chip) {
+            updateField('budget', chip.fullValue);
+            budgetInputRef.current?.focus();
+            return;
+        }
+        const current = draft.budget.trim();
+        const numericCore = current
+            .replace(/^(₹|\$|€|£|AED|INR|USD|EUR)\s*/i, '')
+            .replace(/\s*(INR|USD|AED|EUR|GBP)$/i, '')
+            .trim();
+        const nextValue = numericCore
+            ? `${chip.prefix}${numericCore}${chip.suffix}`
+            : chip.prefix;
+        updateField('budget', nextValue);
+        requestAnimationFrame(() => {
+            const el = budgetInputRef.current;
+            if (!el) return;
+            el.focus();
+            const cursorPos = numericCore ? nextValue.length : chip.prefix.length;
+            el.setSelectionRange(cursorPos, cursorPos);
+        });
+    };
 
     const close = () => {
         closeModal();
         setTimeout(() => {
             setIsSuccess(false);
+            setDirectDispatchMode(false);
+            setCopiedBrief(false);
             setErrorMessage(null);
             setPreselectedService('');
         }, 300);
@@ -35,17 +131,28 @@ const ContactModal = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
 
+    const handleCopyBrief = async () => {
+        try {
+            await navigator.clipboard.writeText(buildFormattedBrief(draft));
+            setCopiedBrief(true);
+            setTimeout(() => setCopiedBrief(false), 2500);
+        } catch {
+            // Clipboard permission denied — no-op
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true);
         setErrorMessage(null);
 
-        const formData = new FormData(e.currentTarget);
-        const name = formData.get('name');
-        const email = formData.get('email');
-        const service = formData.get('service');
-        const budget = formData.get('budget');
-        const message = formData.get('message');
+        const payload: ContactDraft = {
+            name: draft.name.trim(),
+            email: draft.email.trim(),
+            service: draft.service.trim(),
+            budget: draft.budget.trim(),
+            message: draft.message.trim(),
+        };
 
         try {
             const response = await fetch('/api/contact', {
@@ -53,25 +160,46 @@ const ContactModal = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, service, budget, message }),
+                body: JSON.stringify(payload),
             });
+
+            let data: { ok?: boolean; code?: string; message?: string } | null = null;
+            try {
+                data = await response.json();
+            } catch {
+                data = null;
+            }
 
             if (response.ok) {
                 setIsSuccess(true);
-                setSelectedService('');
-                (e.target as HTMLFormElement).reset();
-            } else {
-                const data = await response.json();
-                setErrorMessage(data?.message || 'Failed to submit request. Please try contacting us directly via email.');
+                setDirectDispatchMode(false);
+                setDraft(EMPTY_DRAFT);
+                removeSessionItem(DRAFT_STORAGE_KEY);
+                return;
             }
+
+            if (response.status === 400) {
+                setErrorMessage(data?.message || 'Please review your inquiry fields and try again.');
+                return;
+            }
+
+            // If email relay is unconfigured (503) or upstream mail provider is unreachable,
+            // switch immediately to Direct Priority Dispatch so the client is never blocked.
+            setDirectDispatchMode(true);
         } catch {
-            setErrorMessage('Network error occurred. Please check your connection or email us directly.');
+            setDirectDispatchMode(true);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     if (!isOpen) return null;
+
+    const formattedBrief = buildFormattedBrief(draft);
+    const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(formattedBrief)}`;
+    const mailtoHref = `mailto:${DIRECT_EMAIL}?subject=${encodeURIComponent(
+        `[cgtofficial.com] Project Inquiry: ${draft.name || 'Client'} — ${draft.service || 'Engineering'}`
+    )}&body=${encodeURIComponent(formattedBrief)}`;
 
     return (
         <div
@@ -89,7 +217,7 @@ const ContactModal = () => {
             {/* Modal Content — data-lenis-prevent ensures crisp native scrolling inside modal */}
             <div
                 data-lenis-prevent
-                className="relative w-full max-w-lg p-6 sm:p-8 md:p-10 rounded-[2rem] bg-[#090909] border border-white/[0.1] shadow-[0_32px_90px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.08)] overflow-y-auto max-h-[90vh] animate-fade-in z-10 custom-scrollbar"
+                className="relative w-full max-w-lg p-6 sm:p-8 md:p-9 rounded-[2rem] bg-[#090909] border border-white/[0.1] shadow-[0_32px_90px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.08)] overflow-y-auto max-h-[90vh] animate-fade-in z-10 custom-scrollbar"
             >
                 <button
                     type="button"
@@ -139,6 +267,93 @@ const ContactModal = () => {
                             Return to Site
                         </Button>
                     </div>
+                ) : directDispatchMode ? (
+                    <div className="flex flex-col gap-4 py-2 animate-fade-in relative z-10">
+                        <div className="rounded-2xl bg-[#F4751E]/[0.08] border border-[#F4751E]/25 p-4 text-left">
+                            <p className="text-sm font-semibold text-white mb-1">
+                                Brief Ready for Instant Direct Dispatch
+                            </p>
+                            <p className="text-xs text-white/65 leading-relaxed">
+                                Your inquiry details are formatted and preserved below. Dispatch directly to our engineering desk in one click for priority response:
+                            </p>
+                        </div>
+
+                        <div className="rounded-xl bg-[#111111] border border-white/[0.08] p-3.5 text-xs text-white/75 space-y-1.5 font-mono leading-relaxed max-h-40 overflow-y-auto custom-scrollbar">
+                            <div><span className="text-white/40">Name:</span> {draft.name}</div>
+                            <div><span className="text-white/40">Email:</span> {draft.email}</div>
+                            <div><span className="text-white/40">Capability:</span> {draft.service}</div>
+                            <div><span className="text-white/40">Budget:</span> {draft.budget}</div>
+                            <div className="pt-1 border-t border-white/[0.06] text-white/65 whitespace-pre-wrap">{draft.message}</div>
+                        </div>
+
+                        <div className="flex flex-col gap-2.5 mt-1">
+                            <Button
+                                asChild
+                                size="lg"
+                                className="w-full"
+                            >
+                                <a
+                                    href={whatsappHref}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => {
+                                        removeSessionItem(DRAFT_STORAGE_KEY);
+                                    }}
+                                >
+                                    <MessageCircle className="w-4 h-4" />
+                                    <span>Send Pre-Filled Brief via WhatsApp</span>
+                                    <ArrowUpRight className="w-4 h-4" />
+                                </a>
+                            </Button>
+
+                            <Button
+                                asChild
+                                variant="secondary"
+                                size="lg"
+                                className="w-full"
+                            >
+                                <a
+                                    href={mailtoHref}
+                                    onClick={() => {
+                                        removeSessionItem(DRAFT_STORAGE_KEY);
+                                    }}
+                                >
+                                    <Mail className="w-4 h-4" />
+                                    <span>Send via Direct Email App</span>
+                                    <ArrowUpRight className="w-4 h-4" />
+                                </a>
+                            </Button>
+
+                            <div className="flex items-center justify-between gap-2 pt-1">
+                                <button
+                                    type="button"
+                                    onClick={() => setDirectDispatchMode(false)}
+                                    className="inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-white transition-colors py-1.5 px-2"
+                                >
+                                    <ArrowLeft className="w-3.5 h-3.5" />
+                                    <span>Edit Brief</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={handleCopyBrief}
+                                    className="inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-lg py-1.5 px-3 transition-all"
+                                >
+                                    {copiedBrief ? (
+                                        <>
+                                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                                            <span className="text-emerald-300">Copied Brief</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Copy className="w-3.5 h-3.5" />
+                                            <span>Copy Brief Text</span>
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 ) : (
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4 relative z-10">
                         {/* Name */}
@@ -149,6 +364,9 @@ const ContactModal = () => {
                                 name="name"
                                 id="name"
                                 required
+                                maxLength={120}
+                                value={draft.name}
+                                onChange={(e) => updateField('name', e.target.value)}
                                 placeholder="Your full name"
                                 className="w-full bg-[#121212] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#F4751E]/60 focus:ring-1 focus:ring-[#F4751E]/60 transition-all"
                             />
@@ -162,6 +380,9 @@ const ContactModal = () => {
                                 name="email"
                                 id="email"
                                 required
+                                maxLength={254}
+                                value={draft.email}
+                                onChange={(e) => updateField('email', e.target.value)}
                                 placeholder="name@company.com"
                                 className="w-full bg-[#121212] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#F4751E]/60 focus:ring-1 focus:ring-[#F4751E]/60 transition-all"
                             />
@@ -175,8 +396,8 @@ const ContactModal = () => {
                                     name="service"
                                     id="service"
                                     required
-                                    value={selectedService}
-                                    onChange={(e) => setSelectedService(e.target.value)}
+                                    value={draft.service}
+                                    onChange={(e) => updateField('service', e.target.value)}
                                     className="w-full bg-[#121212] border border-white/10 rounded-xl px-4 py-3 text-sm text-white appearance-none focus:outline-none focus:border-[#F4751E]/60 focus:ring-1 focus:ring-[#F4751E]/60 transition-all cursor-pointer"
                                 >
                                     <option value="" disabled className="text-white/30">Select a capability</option>
@@ -193,24 +414,50 @@ const ContactModal = () => {
                             </div>
                         </div>
 
-                        {/* Estimated Budget */}
-                        <div className="flex flex-col gap-1.5">
-                            <label htmlFor="budget" className="text-[13px] font-medium text-white/80 ml-1">Estimated Investment</label>
-                            <div className="relative">
-                                <select
-                                    name="budget"
-                                    id="budget"
-                                    required
-                                    defaultValue=""
-                                    className="w-full bg-[#121212] border border-white/10 rounded-xl px-4 py-3 text-sm text-white appearance-none focus:outline-none focus:border-[#F4751E]/60 focus:ring-1 focus:ring-[#F4751E]/60 transition-all cursor-pointer"
-                                >
-                                    <option value="" disabled className="text-white/30">Select estimated budget range</option>
-                                    <option value="Under $5,000">Under $5,000</option>
-                                    <option value="$5,000 - $15,000">$5,000 – $15,000</option>
-                                    <option value="$15,000 - $35,000">$15,000 – $35,000</option>
-                                    <option value="$35,000+">$35,000+</option>
-                                </select>
-                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
+                        {/* Estimated Budget — User-Fillable with Currency Notice */}
+                        <div className="flex flex-col gap-2">
+                            <div className="flex items-center justify-between ml-1">
+                                <label htmlFor="budget" className="text-[13px] font-medium text-white/80">
+                                    Estimated Budget
+                                </label>
+                                <span className="text-[11px] font-medium text-[#F4751E]/90">
+                                    INR / Global Currency
+                                </span>
+                            </div>
+
+                            {/* Notice right above fill-in-the-blank */}
+                            <div className="flex items-start gap-2 rounded-xl bg-[#F4751E]/[0.07] border border-[#F4751E]/20 px-3 py-2 text-[11.5px] text-white/75 leading-snug">
+                                <Info className="w-3.5 h-3.5 text-[#F4751E] shrink-0 mt-0.5" />
+                                <span>
+                                    <strong className="text-white/90 font-medium">Notice:</strong> Mention currency with your budget (e.g., <span className="text-white/90">₹75,000 INR</span>, <span className="text-white/90">₹2.5L INR</span>, <span className="text-white/90">$5,000 USD</span>, or <span className="text-white/90">AED 15,000</span>).
+                                </span>
+                            </div>
+
+                            <input
+                                ref={budgetInputRef}
+                                type="text"
+                                name="budget"
+                                id="budget"
+                                required
+                                maxLength={120}
+                                value={draft.budget}
+                                onChange={(e) => updateField('budget', e.target.value)}
+                                placeholder="Enter budget & mention currency (e.g., ₹80,000 INR)"
+                                className="w-full bg-[#121212] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#F4751E]/60 focus:ring-1 focus:ring-[#F4751E]/60 transition-all"
+                            />
+
+                            {/* Quick 1-tap currency helpers */}
+                            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                {CURRENCY_QUICK_CHIPS.map((chip) => (
+                                    <button
+                                        key={chip.label}
+                                        type="button"
+                                        onClick={() => applyCurrencyChip(chip)}
+                                        className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-white/[0.04] hover:bg-[#F4751E]/15 border border-white/[0.08] hover:border-[#F4751E]/40 text-white/65 hover:text-white transition-all active:scale-95"
+                                    >
+                                        {chip.label}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
@@ -221,7 +468,10 @@ const ContactModal = () => {
                                 name="message"
                                 id="message"
                                 required
+                                maxLength={4000}
                                 rows={3}
+                                value={draft.message}
+                                onChange={(e) => updateField('message', e.target.value)}
                                 placeholder="Outline your system objectives, target launch window, or key bottlenecks..."
                                 className="w-full bg-[#121212] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#F4751E]/60 focus:ring-1 focus:ring-[#F4751E]/60 transition-all resize-none"
                             />

@@ -1,17 +1,14 @@
 import { useEffect } from 'react';
+import { acquireBodyScrollLock } from '@/lib/storage';
 
 /**
- * Locks body scroll when `locked` is true; restores it on false or unmount.
+ * Reference-counted body scroll lock. Multiple overlays (Preloader, Mobile Drawer,
+ * ContactModal) can lock/unlock independently without clobbering each other.
  */
 export function useBodyScrollLock(locked: boolean) {
   useEffect(() => {
-    if (locked) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    if (!locked) return;
+    const release = acquireBodyScrollLock();
+    return release;
   }, [locked]);
 }

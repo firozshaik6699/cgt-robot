@@ -11,7 +11,6 @@ export default {
                 'bg-secondary': 'var(--bg-secondary)',
                 'bg-tertiary': 'var(--bg-tertiary)',
                 'accent-color': 'var(--accent-color)',
-                'online-green': 'var(--online-green)',
                 'foreground': 'var(--foreground)',
                 'secondary': 'var(--secondary)',
                 'muted-foreground': 'var(--muted-foreground)',

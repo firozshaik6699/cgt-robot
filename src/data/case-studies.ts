@@ -1,16 +1,16 @@
 import type { CaseStudyItem } from '@/types';
 
-import fleetMasterImg from '@/assets/fleet-master-msmt.png';
-import muhasibImg from '@/assets/muhasib.png';
-import nexoraImg from '@/assets/nexora.png';
-import pizzaImg from '@/assets/pizza.png';
-import toonhubImg from '@/assets/toonhub.png';
+import fleetMasterImg from '@/assets/fleet-master-msmt.jpg';
+import muhasibImg from '@/assets/muhasib.jpg';
+import nexoraImg from '@/assets/nexora.jpg';
+import pizzaImg from '@/assets/pizza.jpg';
+import toonhubImg from '@/assets/toonhub.jpg';
 
 export const caseStudies: CaseStudyItem[] = [
     {
         id: 1,
         title: 'Fleet Master MSMT',
-        description: 'Enterprise fleet management & real-time tracking platform',
+        description: 'Enterprise fleet management & real-time telemetry platform',
         imageSrc: fleetMasterImg,
         href: 'https://fleet-master-msmt.vercel.app/',
         tag: 'Enterprise SaaS',
@@ -26,15 +26,15 @@ export const caseStudies: CaseStudyItem[] = [
     {
         id: 3,
         title: 'Nexora',
-        description: 'Immersive gaming ecosystem & interactive demo platform',
+        description: 'High-concurrency interactive gaming ecosystem',
         imageSrc: nexoraImg,
         href: 'https://nexora-six-green-83.vercel.app/',
-        tag: 'Web3 & Gaming',
+        tag: 'Interactive Platform',
     },
     {
         id: 4,
         title: 'Pizza Ordering Platform',
-        description: 'Full-stack food ordering & instant delivery management system',
+        description: 'Full-stack ordering & real-time delivery dispatch system',
         imageSrc: pizzaImg,
         href: 'https://pizza-nu-navy.vercel.app/',
         tag: 'Full-Stack App',
@@ -42,7 +42,7 @@ export const caseStudies: CaseStudyItem[] = [
     {
         id: 5,
         title: 'ToonHub',
-        description: 'Creative content marketplace & animation streaming platform',
+        description: 'Digital content marketplace & media streaming architecture',
         imageSrc: toonhubImg,
         href: 'https://toonhub-weld.vercel.app/',
         tag: 'Media Platform',

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useBodyScrollLock } from './useBodyScrollLock';
 
 export interface OpenContactDetail {
   service?: string;
@@ -29,15 +30,11 @@ export function useHashModal(hash: string) {
   const [isOpen, setIsOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState<string>('');
 
+  useBodyScrollLock(isOpen);
+
   useEffect(() => {
     const syncFromHash = () => {
-      if (window.location.hash === `#${hash}`) {
-        setIsOpen(true);
-        document.body.style.overflow = 'hidden';
-      } else {
-        setIsOpen(false);
-        document.body.style.overflow = '';
-      }
+      setIsOpen(window.location.hash === `#${hash}`);
     };
 
     const handleCustomOpen = (e: Event) => {
@@ -46,7 +43,6 @@ export function useHashModal(hash: string) {
         setPreselectedService(customEvent.detail.service);
       }
       setIsOpen(true);
-      document.body.style.overflow = 'hidden';
     };
 
     syncFromHash();
@@ -61,7 +57,6 @@ export function useHashModal(hash: string) {
       if (hash === 'contact') {
         window.removeEventListener(CONTACT_EVENT, handleCustomOpen);
       }
-      document.body.style.overflow = '';
     };
   }, [hash]);
 
@@ -70,7 +65,6 @@ export function useHashModal(hash: string) {
     if (window.location.hash === `#${hash}`) {
       window.history.pushState('', document.title, window.location.pathname + window.location.search);
     }
-    document.body.style.overflow = '';
   }, [hash]);
 
   return { isOpen, close, preselectedService, setPreselectedService };

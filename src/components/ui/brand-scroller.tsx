@@ -6,9 +6,18 @@ interface BrandScrollerProps {
   className?: string;
   duration?: string;
   gap?: string;
+  reverse?: boolean;
 }
 
-export const BrandScroller = ({ children, className, duration = "25s", gap = "1.25rem" }: BrandScrollerProps) => {
+export const BrandScroller = ({
+  children,
+  className,
+  duration = "25s",
+  gap = "1.25rem",
+  reverse = false,
+}: BrandScrollerProps) => {
+  const animClass = reverse ? "animate-marquee-reverse" : "animate-marquee";
+
   return (
     <div
       className={cn(
@@ -20,11 +29,11 @@ export const BrandScroller = ({ children, className, duration = "25s", gap = "1.
         "--duration": duration,
       } as React.CSSProperties}
     >
-      <div className="flex shrink-0 flex-row gap-[var(--gap)] animate-marquee will-change-transform">
+      <div className={cn("flex shrink-0 flex-row gap-[var(--gap)] will-change-transform", animClass)}>
         {children}
         {children}
       </div>
-      <div className="flex shrink-0 flex-row gap-[var(--gap)] animate-marquee will-change-transform" aria-hidden="true">
+      <div className={cn("flex shrink-0 flex-row gap-[var(--gap)] will-change-transform", animClass)} aria-hidden="true">
         {children}
         {children}
       </div>
@@ -32,26 +41,6 @@ export const BrandScroller = ({ children, className, duration = "25s", gap = "1.
   );
 };
 
-export const BrandScrollerReverse = ({ children, className, duration = "25s", gap = "1.25rem" }: BrandScrollerProps) => {
-  return (
-    <div
-      className={cn(
-        "group flex overflow-hidden py-2 flex-row max-w-full select-none",
-        className
-      )}
-      style={{
-        "--gap": gap,
-        "--duration": duration,
-      } as React.CSSProperties}
-    >
-      <div className="flex shrink-0 flex-row gap-[var(--gap)] animate-marquee-reverse will-change-transform">
-        {children}
-        {children}
-      </div>
-      <div className="flex shrink-0 flex-row gap-[var(--gap)] animate-marquee-reverse will-change-transform" aria-hidden="true">
-        {children}
-        {children}
-      </div>
-    </div>
-  );
-};
+export const BrandScrollerReverse = (props: Omit<BrandScrollerProps, "reverse">) => (
+  <BrandScroller {...props} reverse />
+);

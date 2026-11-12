@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { fileURLToPath, URL } from "url"
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -11,16 +10,17 @@ export default defineConfig({
     },
   },
   build: {
-    // Separate Spline into its own async chunk so it doesn't block initial page load
+    target: 'es2020',
+    cssMinify: true,
     rollupOptions: {
       output: {
         manualChunks: {
           'spline-runtime': ['@splinetool/runtime', '@splinetool/react-spline'],
           'framer': ['framer-motion'],
+          'icons': ['lucide-react', 'react-icons/si'],
         },
       },
     },
-    // Suppress chunk size warnings for Spline (it's inherently large but lazy-loaded)
     chunkSizeWarningLimit: 2500,
   },
 })

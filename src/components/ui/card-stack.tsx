@@ -1,10 +1,7 @@
 import * as React from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { SquareArrowOutUpRight, ChevronLeft, ChevronRight } from "lucide-react";
-
-function cn(...classes: Array<string | undefined | null | false>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cn } from "@/lib/utils";
 
 export type CardStackItem = {
   id: string | number;
@@ -418,7 +415,8 @@ function DefaultFanCard({ item }: { item: CardStackItem; active: boolean }) {
             alt={item.title}
             className="h-full w-full object-cover"
             draggable={false}
-            loading="eager"
+            loading="lazy"
+            decoding="async"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-secondary text-sm text-muted-foreground">

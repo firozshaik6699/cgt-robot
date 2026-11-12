@@ -2,6 +2,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import logo from '@/assets/logo_metallic_transparent.png';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
+import { getSessionItem, setSessionItem } from '@/lib/storage';
+
+const WARM_SESSION_KEY = 'cgt_robot_warm_v1';
 
 interface PreloaderProps {
   onComplete?: () => void;
@@ -17,81 +21,69 @@ export const Preloader: React.FC<PreloaderProps> = ({
   const pathname = location.pathname.replace(/\/$/, '') || '/';
   const isHomeRoute = pathname === '/';
 
+  const isWarmSession = getSessionItem<boolean>(WARM_SESSION_KEY, false);
   const [isVisible, setIsVisible] = useState(true);
-  const [progress, setProgress] = useState(8);
+  const [progress, setProgress] = useState(isWarmSession ? 38 : 8);
   const hasDismissed = useRef(false);
 
-  // Lock body scroll on iOS & Android while Preloader is covering the viewport
-  useEffect(() => {
-    if (isVisible) {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-    };
-  }, [isVisible]);
+  // Reference-counted body scroll lock prevents clobbering by Navbar / ContactModal
+  useBodyScrollLock(isVisible);
 
   useEffect(() => {
-    const finalizeReveal = () => {
+    const finalizeReveal = (markRobotWarm = false) => {
       if (hasDismissed.current) return;
       hasDismissed.current = true;
       setProgress(100);
+      if (markRobotWarm) {
+        setSessionItem(WARM_SESSION_KEY, true);
+      }
 
-      // Brief beat at 100% so progress bar completes cleanly, then trigger Hero + Curtain sync
+      const settleDelay = isWarmSession ? 120 : 220;
       window.setTimeout(() => {
         window.__CGT_PRELOADER_DONE__ = true;
         window.dispatchEvent(new CustomEvent('cgt-preloader-reveal'));
         setIsVisible(false);
         if (onComplete) onComplete();
-      }, 220);
+      }, settleDelay);
     };
 
     // Non-home routes (/blog, /partnership/syncrobiz, etc.) have no 3D robot — release swiftly
     if (!isHomeRoute) {
       if (hasDismissed.current) return;
-      const quickTimer = window.setTimeout(finalizeReveal, 450);
+      const quickTimer = window.setTimeout(() => finalizeReveal(false), 380);
       return () => window.clearTimeout(quickTimer);
     }
 
     // Home route: strictly wait until Spline 3D robot finishes loading & painting frame 2
     if (window.__CGT_SPLINE_LOADED__) {
-      finalizeReveal();
+      finalizeReveal(true);
       return;
     }
 
-    // If user entered via a subpage first and then navigated to '/' before robot loaded,
-    // re-engage the preloader until the 3D robot finishes initializing
     hasDismissed.current = false;
     window.__CGT_PRELOADER_DONE__ = false;
-    setProgress(12);
+    setProgress(isWarmSession ? 42 : 12);
     setIsVisible(true);
 
-    // Smooth asymptotic progress curve up to 92% while 3D runtime + scene download on new devices
     const progressInterval = window.setInterval(() => {
       setProgress((prev) => {
         if (prev >= 92) return prev;
         const remaining = 92 - prev;
-        const step = Math.max(0.8, remaining * 0.08);
+        const step = Math.max(0.9, remaining * 0.09);
         return Math.min(92, Math.round((prev + step) * 10) / 10);
       });
-    }, 140);
+    }, 130);
 
     const handleSplineLoaded = () => {
       window.clearInterval(progressInterval);
-      finalizeReveal();
+      finalizeReveal(true);
     };
 
     window.addEventListener('cgt-spline-loaded', handleSplineLoaded);
 
-    // Generous 22s safety ceiling only in case Cloudinary is blocked/offline
     const safetyTimer = window.setTimeout(() => {
       window.clearInterval(progressInterval);
-      finalizeReveal();
+      finalizeReveal(false);
     }, maxWaitTimeMs);
 
     return () => {
@@ -99,19 +91,18 @@ export const Preloader: React.FC<PreloaderProps> = ({
       window.removeEventListener('cgt-spline-loaded', handleSplineLoaded);
       window.clearTimeout(safetyTimer);
     };
-  }, [isHomeRoute, maxWaitTimeMs, onComplete]);
+  }, [isHomeRoute, isWarmSession, maxWaitTimeMs, onComplete]);
 
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
           initial={{ opacity: 1 }}
-          // Pure GPU opacity + subtle scale (NO CSS filter:blur on fullscreen layer — protects iOS WebGL VRAM)
           exit={{ opacity: 0, scale: 1.015 }}
-          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#020202] overflow-hidden select-none pointer-events-auto touch-none"
         >
-          {/* Zero-VRAM Radial Ambient Studio Glow (replaces heavy blur-[130px] offscreen texture on iOS) */}
+          {/* Zero-VRAM Radial Ambient Studio Glow */}
           <motion.div
             animate={{
               scale: [1, 1.12, 1],
@@ -129,7 +120,6 @@ export const Preloader: React.FC<PreloaderProps> = ({
             }}
           />
 
-          {/* CGT Metallic + Orange Triangle Brand Mark & Live Loader Progress */}
           <div className="relative z-20 flex flex-col items-center justify-center px-6 text-center">
             <motion.div
               initial={{ scale: 0.94, opacity: 0 }}
@@ -151,7 +141,6 @@ export const Preloader: React.FC<PreloaderProps> = ({
               />
             </motion.div>
 
-            {/* Studio Subtitle */}
             <motion.div
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
@@ -162,7 +151,6 @@ export const Preloader: React.FC<PreloaderProps> = ({
                 Digital Engineering Studio
               </span>
 
-              {/* Sleek Architectural Progress Track */}
               {isHomeRoute && (
                 <div className="flex flex-col items-center gap-2 w-44 sm:w-52">
                   <div className="w-full h-[2px] rounded-full bg-white/[0.08] overflow-hidden">
